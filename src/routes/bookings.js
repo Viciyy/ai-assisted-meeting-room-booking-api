@@ -4,6 +4,7 @@
  */
 
 const express = require('express');
+const { body, param } = require('express-validator');
 const router = express.Router();
 const bookingStore = require('../storage/bookingStore');
 const validators = require('../validators/bookingValidators');
@@ -14,8 +15,13 @@ const ErrorTypes = require('../constants/errorTypes');
  * Create a booking
  * POST /bookings
  */
-router.post('/', (req, res) => {
-  const { roomId, startTime, endTime } = req.body;
+router.post('/',
+  // Sanitize inputs
+  body('roomId').trim().escape(),
+  body('startTime').trim(),
+  body('endTime').trim(),
+  (req, res) => {
+    const { roomId, startTime, endTime } = req.body;
 
   // Validate booking (pure business logic)
   const validation = validators.validateBooking(roomId, startTime, endTime);
@@ -32,9 +38,12 @@ router.post('/', (req, res) => {
  * Cancel a booking
  * DELETE /bookings/:id
  */
-router.delete('/:id', (req, res) => {
-  // Validate booking ID (pure business logic)
-  const idValidation = validators.validateBookingId(req.params.id);
+router.delete('/:id',
+  // Sanitize inputs
+  param('id').trim(),
+  (req, res) => {
+    // Validate booking ID (pure business logic)
+    const idValidation = validators.validateBookingId(req.params.id);
   if (!idValidation.valid) {
     return sendValidationError(res, idValidation);
   }
@@ -48,6 +57,6 @@ router.delete('/:id', (req, res) => {
 
   const cancelledBooking = bookingStore.deleteBookingByIndex(index);
   sendSuccess(res, { message: 'Booking cancelled successfully', booking: cancelledBooking });
-});
+  });
 
 module.exports = router;

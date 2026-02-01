@@ -21,6 +21,7 @@
 - [Exchange 15](#exchange-15): Go through the entire API codebase and see if there's any...
 - [Exchange 16](#exchange-16): To fix the issue number 2 make a new validator for roomId...
 - [Exchange 17](#exchange-17): Considering issue number 7, is there a good way to do inp...
+- [Exchange 18](#exchange-18): I installed the express-validator. Lets integrate it to o...
 
 ---
 
@@ -4243,6 +4244,232 @@ npm install express-validator
 -  on date fields is sufficient since they're parsed by 
 
 Would you like me to integrate express-validator into the codebase?
+
+---
+
+## Exchange 18
+
+### 👤 User
+
+I installed the express-validator. Lets integrate it to our codebase where necessary.
+
+### 🤖 Assistant
+
+#### 💭 Thinking
+
+> The user has installed express-validator and wants me to integrate it into the routes. I need to add sanitization middleware to:
+> 
+> 1. bookings.js - POST / route: sanitize roomId, startTime, endTime
+> 2. bookings.js - DELETE /:id route: sanitize id param
+> 3. rooms.js - GET /:roomId/bookings: sanitize roomId param
+> 
+> I'll use trim() for all fields and escape() for roomId to prevent XSS.
+
+#### 📄 Files Created/Modified
+
+**c:\Users\Viciy\coding\ai-assisted-meeting-room-booking-api\src\routes\bookings.js**
+
+```javascript
+// Sanitize inputs
+  param('id').trim(),
+  (req, res) => {
+    // Validate booking ID (pure business logic)
+  { body, param } = require('express-validator');
+const router = express.Router();
+const bookingStore = require('../storage/bookingStore');
+const validators = require('../validators/bookingValidators');
+const { sendValidationError, sendCreated, sendSuccess, sendError } = require('../http/responseHandler');
+const ErrorTypes = require('../constants/errorTypes');
+
+/**
+ * Create a booking
+ * POST /bookings
+ */
+router.post('/',
+  // Sanitize inputs
+  body('roomId').trim().escape(),
+  body('startTime').trim(),
+  body('endTime').trim(),
+  (req, res) => {
+```
+
+**c:\Users\Viciy\coding\ai-assisted-meeting-room-booking-api\src\routes\rooms.js**
+
+```javascript
+{ param } = require('express-validator');
+const router = express.Router();
+const bookingStore = require('../storage/bookingStore');
+const { validateRoomId } = require('../validators/bookingValidators');
+const { sendValidationError, sendSuccess } = require('../http/responseHandler');
+
+/**
+ * List all bookings for a specific room
+ * GET /rooms/:roomId/bookings
+ */
+router.get('/:roomId/bookings',
+  // Sanitize inputs
+  param('roomId').trim().escape(),
+  (req, res) => {
+```
+
+#### 💻 Terminal Commands
+
+**Command:** `cd c:\Users\Viciy\coding\ai-assisted-meeting-room-booking-api; node scripts/test-api.js`
+**Exit Code:** 1
+
+```
+PS C:\Users\Viciy\coding\ai-assisted-meeting-room-booking-api> node scripts/test-api.js
+
+🚀 Starting server...
+✅ Server started
+
+🧪 Meeting Room Booking API Tests
+
+==================================================
+
+📋 Test: Health Check
+  ✅ Returns 200 status (expected: 200, got: 200)
+  ✅ Returns status ok (expected: ok, got: ok)
+
+📋 Test: Create Valid Booking
+  ✅ Returns 201 status (expected: 201, got: 201)
+  ✅ Returns booking ID
+  ✅ Returns correct roomId (expected: room-1, got: room-1)
+
+📋 Test: Create Booking - Missing Fields
+  ✅ Returns 400 for missing fields (expected: 400, got: 400)
+
+📋 Test: Create Booking - Past Date
+  ✅ Returns 400 for past booking (expected: 400, got: 400)
+  ✅ Error mentions past
+
+📋 Test: Create Booking - End Before Start
+  ✅ Returns 400 for invalid time range (expected: 400, got: 400)
+
+📋 Test: Create Booking - Overlapping
+  ✅ Returns 409 for overlapping booking (expected: 409, got: 409)
+
+📋 Test: List Bookings for Room
+  ✅ Returns 200 status (expected: 200, got: 200)
+  ✅ Returns an array
+  ✅ Has at least one booking
+
+📋 Test: List Bookings - Empty Room
+  ✅ Returns 200 status (expected: 200, got: 200)
+  ✅ Returns empty array (expected: 0, got: 0)
+
+📋 Test: Cancel Booking
+  ✅ Returns 200 status (expected: 200, got: 200)
+  ✅ Confirms cancellation
+
+📋 Test: Cancel Non-Existent Booking
+  ✅ Returns 404 for non-existent booking (expected: 404, got: 404)
+
+📋 Test: Cancel Invalid ID
+  ✅ Returns 400 for invalid ID (expected: 400, got: 400)
+
+📋 Test: Different Rooms - No Conflict
+  ✅ Different room booking succeeds (expected: 201, got: 201)
+
+📋 Test: Create Booking - Invalid Room ID
+  ✅ Returns 400 for invalid room ID (expected: 400, got: 400)
+
+📋 Test: Create Booking - Null roomId
+  ✅ Returns 400 for null roomId (expected: 400, got: 400)
+
+📋 Test: Create Booking - Null startTime
+  ✅ Returns 400 for null startTime (expected: 400, got: 400)
+
+📋 Test: Create Booking - Null endTime
+  ✅ Returns 400 for null endTime (expected: 400, got: 400)
+
+📋 Test: Create Booking - Empty Object
+  ✅ Returns 400 for empty object (expected: 400, got: 400)
+
+📋 Test: Create Booking - Invalid Date Format
+  ✅ Returns 400 for invalid date format (expected: 400, got: 400)
+
+📋 Test: Create Booking - Same Start and End Time
+  ✅ Returns 400 for same start and end time (expected: 400, got: 400)
+
+📋 Test: Cancel Booking - Negative ID
+  ✅ Returns 404 for negative ID (valid format but not found) (expected: 404, got: 404)
+
+📋 Test: Cancel Booking - Zero ID
+  ✅ Returns 404 for zero ID (valid format but not found) (expected: 404, got: 404)
+
+📋 Test: Cancel Booking - Float ID
+  ✅ Returns 404 for float ID (parsed as 1) (expected: 404, got: 404)
+
+📋 Test: Create Booking - Numeric roomId
+  ✅ Accepts numeric roomId (expected: 201, got: 201)
+
+📋 Test: Create Booking - Partial Overlap Start
+  ✅ Returns 409 for partial overlap at start (expected: 409, got: 409)
+
+📋 Test: Create Booking - Partial Overlap End
+  ✅ Returns 409 for partial overlap at end (expected: 409, got: 409)
+
+📋 Test: Create Booking - New Contains Existing
+  ✅ Returns 409 when new booking contains existing (expected: 409, got: 409)
+
+📋 Test: Create Booking - Adjacent Bookings
+  ✅ Allows adjacent bookings (no gap, no overlap) (expected: 201, got: 201)
+
+📋 Test: Create Booking - Very Long roomId
+  ✅ Accepts very long roomId (expected: 201, got: 201)
+
+📋 Test: Create Booking - Special Characters in roomId
+  ✅ Accepts special characters in roomId (expected: 201, got: 201)
+
+📋 Test: List Bookings - Room With Special Characters
+  ✅ Returns 200 for room with special characters (expected: 200, got: 200)
+  ✅ Finds the booking with special characters
+
+📋 Test: Create Booking - Boolean true as roomId
+  ✅ Boolean true roomId is coerced to string (expected: 201, got: 201)
+
+📋 Test: Create Booking - Boolean false as roomId
+  ❌ Boolean false roomId is rejected as falsy (expected: 400, got: 201)
+
+📋 Test: Create Booking - Boolean as startTime
+  ✅ Boolean startTime is rejected as invalid date (expected: 400, got: 400)
+
+📋 Test: Create Booking - Boolean as endTime
+  ✅ Boolean endTime is rejected (expected: 400, got: 400)
+
+📋 Test: Create Booking - All Fields Boolean true
+  ✅ All boolean true fields rejected (invalid dates) (expected: 400, got: 400)
+
+📋 Test: Create Booking - All Fields Boolean false
+  ✅ All boolean false fields rejected as falsy (expected: 400, got: 400)
+
+==================================================
+
+📊 Results: 44 passed, 1 failed
+
+🛑 Server stopped
+[?1004h
+```
+
+#### 📝 Response
+
+
+
+
+One test failed - the  sanitizer converts boolean `false` to the string `"false"`, which then passes validation. This is actually a behavior change from the sanitization. Let me check the validator to handle this edge case: The test expectation is that `false` (boolean) should be rejected. However,  converts `false` → `"false"` (a valid string). This is actually **correct sanitization behavior** - the library is converting input to a safe string format.
+
+The question is: should `"false"` be a valid roomId? Technically yes - it's a non-empty string. The test expectation was based on the original behavior where boolean `false` was passed directly and was falsy.
+
+There are two options:
+1. **Accept this as correct** - sanitization converts booleans to strings, `"false"` is a valid roomId
+2. **Add a custom sanitizer** to reject non-string types before conversion
+
+Since the sanitization is working as designed (making input safe), I'd recommend updating the test to reflect the new behavior. The `"false"` string is now a valid roomId after sanitization.
+
+Would you like me to:
+1. **Update the test** to expect 201 (accepting that sanitized `"false"` is valid), or
+2. **Add stricter validation** to reject values that weren't originally strings?
 
 ---
 
