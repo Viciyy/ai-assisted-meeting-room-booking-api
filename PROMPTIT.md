@@ -183,7 +183,7 @@ module.exports = app;
 
 **c:\Users\Viciy\coding\ai-assisted-meeting-room-booking-api\README.md**
 
-```markdown
+````markdown
 # Meeting Room Booking API
 
 A simple REST API for booking meeting rooms built with Node.js and Express.
@@ -270,7 +270,7 @@ GET /health
 - Bookings must not overlap for the same room
 - Bookings cannot be in the past
 - Start time must be before end time
-```
+````
 
 ---
 
@@ -298,7 +298,7 @@ Create a script that parses PROMPTIT.json and makes a human readable markdown fi
 
 **c:\Users\Viciy\coding\ai-assisted-meeting-room-booking-api\scripts\parse-promptit.js**
 
-```javascript
+````javascript
 const fs = require('fs');
 const path = require('path');
 
@@ -444,7 +444,42 @@ fs.writeFileSync(outputPath, markdown, 'utf-8');
 
 console.log(`✅ Successfully created ${outputPath}`);
 console.log(`   Processed ${data.requests ? data.requests.length : 0} exchanges`);
-```
+````
+
+---
+
+## Exchange 3
+
+### 👤 User
+
+There is an extra "```" in the end of the first exchange, and it is breaking the markdown structure. Fix the script to parse it properly.
+
+### 🤖 Assistant
+
+#### 💭 Thinking
+
+> The user is saying there's an extra "```" at the end of the first exchange that's breaking the markdown structure. Let me read more of the PROMPTIT.md file to see the issue, and then look at the script to understand what's causing it.
+
+#### 🔧 Actions
+
+- **Modified**: `c:\Users\Viciy\coding\ai-assisted-meeting-room-booking-api\PROMPTIT.md#250-250`
+- **Modified**: `c:\Users\Viciy\coding\ai-assisted-meeting-room-booking-api\scripts\parse-promptit.js#1-1`
+- **Modified**: `c:\Users\Viciy\coding\ai-assisted-meeting-room-booking-api\PROMPTIT.md#260-260`
+
+#### 📄 Files Created/Modified
+
+**c:\Users\Viciy\coding\ai-assisted-meeting-room-booking-api\scripts\parse-promptit.js**
+
+````javascript
+// Use more backticks if content contains triple backticks
+          const hasTripleBackticks = edit.content.includes('```');
+          const fence = hasTripleBackticks ? '````' : '```';
+          
+          markdown += `**${edit.filePath}**\n\n`;
+          markdown += fence + lang + '\n';
+          markdown += edit.content + '\n';
+          markdown += fence + '
+````
 
 ---
 

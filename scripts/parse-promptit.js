@@ -118,10 +118,14 @@ if (data.requests && Array.isArray(data.requests)) {
           };
           const lang = langMap[ext] || ext;
           
+          // Use more backticks if content contains triple backticks
+          const hasTripleBackticks = edit.content.includes('```');
+          const fence = hasTripleBackticks ? '````' : '```';
+          
           markdown += `**${edit.filePath}**\n\n`;
-          markdown += '```' + lang + '\n';
+          markdown += fence + lang + '\n';
           markdown += edit.content + '\n';
-          markdown += '```\n\n';
+          markdown += fence + '\n\n';
         });
       }
 
