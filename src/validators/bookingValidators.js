@@ -7,6 +7,27 @@ const bookingStore = require('../storage/bookingStore');
 const ErrorTypes = require('../constants/errorTypes');
 
 /**
+ * Validate that roomId is not empty or whitespace
+ */
+function validateRoomId(roomId) {
+  if (!roomId) {
+    return { 
+      valid: false, 
+      error: 'roomId is required', 
+      errorType: ErrorTypes.INVALID_ROOM_ID 
+    };
+  }
+  if (typeof roomId === 'string' && roomId.trim() === '') {
+    return { 
+      valid: false, 
+      error: 'roomId cannot be empty or whitespace', 
+      errorType: ErrorTypes.INVALID_ROOM_ID 
+    };
+  }
+  return { valid: true };
+}
+
+/**
  * Validate that all required fields are present
  */
 function validateRequiredFields(roomId, startTime, endTime) {
@@ -17,14 +38,10 @@ function validateRequiredFields(roomId, startTime, endTime) {
       errorType: ErrorTypes.MISSING_REQUIRED_FIELDS 
     };
   }
-  // Check that roomId is not just whitespace
-  if (typeof roomId === 'string' && roomId.trim() === '') {
-    return { 
-      valid: false, 
-      error: 'roomId cannot be empty or whitespace', 
-      errorType: ErrorTypes.INVALID_ROOM_ID 
-    };
-  }
+  // Validate roomId format
+  const roomIdCheck = validateRoomId(roomId);
+  if (!roomIdCheck.valid) return roomIdCheck;
+
   return { valid: true };
 }
 
@@ -134,6 +151,7 @@ function validateBookingId(id) {
 }
 
 module.exports = {
+  validateRoomId,
   validateRequiredFields,
   validateDateFormat,
   validateTimeOrder,

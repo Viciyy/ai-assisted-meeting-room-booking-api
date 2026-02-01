@@ -5,6 +5,8 @@
 const express = require('express');
 const router = express.Router();
 const bookingStore = require('../storage/bookingStore');
+const { validateRoomId } = require('../validators/bookingValidators');
+const { sendValidationError, sendSuccess } = require('../http/responseHandler');
 
 /**
  * List all bookings for a specific room
@@ -12,8 +14,15 @@ const bookingStore = require('../storage/bookingStore');
  */
 router.get('/:roomId/bookings', (req, res) => {
   const { roomId } = req.params;
+
+  // Validate roomId
+  const roomIdValidation = validateRoomId(roomId);
+  if (!roomIdValidation.valid) {
+    return sendValidationError(res, roomIdValidation);
+  }
+
   const roomBookings = bookingStore.getBookingsByRoom(roomId);
-  res.json(roomBookings);
+  sendSuccess(res, roomBookings);
 });
 
 module.exports = router;
