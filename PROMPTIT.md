@@ -2529,3 +2529,696 @@ Fixed. The  function now checks that  is not just whitespace by adding a  check.
 
 ---
 
+## Exchange 11
+
+### 👤 User
+
+Create new tests that don't only have happy paths. Check also null etc cases.
+
+### 🤖 Assistant
+
+#### 💭 Thinking
+
+> The user wants me to add more edge case tests to the test suite, including null values and other unhappy paths. Let me read the current test file and add comprehensive edge case tests.
+
+#### 📄 Files Created/Modified
+
+**c:\Users\Viciy\coding\ai-assisted-meeting-room-booking-api\scripts\test-api.js**
+
+```javascript
+============================================
+  // Edge Cases & Null Tests
+  // ============================================
+
+  // Test 14: Null roomId
+  console.log('\n📋 Test: Create Booking - Null roomId');
+  const nullRoomRes = await request('POST', '/bookings', {
+    roomId: null,
+    startTime: futureDate(7),
+    endTime: futureDate(8),
+  });
+  assertEq(nullRoomRes.status, 400, 'Returns 400 for null roomId');
+
+  // Test 15: Null startTime
+  console.log('\n📋 Test: Create Booking - Null startTime');
+  const nullStartRes = await request('POST', '/bookings', {
+    roomId: 'room-3',
+    startTime: null,
+    endTime: futureDate(8),
+  });
+  assertEq(nullStartRes.status, 400, 'Returns 400 for null startTime');
+
+  // Test 16: Null endTime
+  console.log('\n📋 Test: Create Booking - Null endTime');
+  const nullEndRes = await request('POST', '/bookings', {
+    roomId: 'room-3',
+    startTime: futureDate(7),
+    endTime: null,
+  });
+  assertEq(nullEndRes.status, 400, 'Returns 400 for null endTime');
+
+  // Test 17: Empty object
+  console.log('\n📋 Test: Create Booking - Empty Object');
+  const emptyObjRes = await request('POST', '/bookings', {});
+  assertEq(emptyObjRes.status, 400, 'Returns 400 for empty object');
+
+  // Test 18: Invalid date format
+  console.log('\n📋 Test: Create Booking - Invalid Date Format');
+  const invalidDateRes = await request('POST', '/bookings', {
+    roomId: 'room-3',
+    startTime: 'not-a-date',
+    endTime: 'also-not-a-date',
+  });
+  assertEq(invalidDateRes.status, 400, 'Returns 400 for invalid date format');
+
+  // Test 19: Same start and end time
+  console.log('\n📋 Test: Create Booking - Same Start and End Time');
+  const sameTime = futureDate(10);
+  const sameTimeRes = await request('POST', '/bookings', {
+    roomId: 'room-3',
+    startTime: sameTime,
+    endTime: sameTime,
+  });
+  assertEq(sameTimeRes.status, 400, 'Returns 400 for same start and end time');
+
+  // Test 20: Cancel with negative ID
+  console.log('\n📋 Test: Cancel Booking - Negative ID');
+  const negativeIdRes = await request('DELETE', '/bookings/-1');
+  assertEq(negativeIdRes.status, 404, 'Returns 404 for negative ID (valid format but not found)');
+
+  // Test 21: Cancel with zero ID
+  console.log('\n📋 Test: Cancel Booking - Zero ID');
+  const zeroIdRes = await request('DELETE', '/bookings/0');
+  assertEq(zeroIdRes.status, 404, 'Returns 404 for zero ID (valid format but not found)');
+
+  // Test 22: Cancel with float ID
+  console.log('\n📋 Test: Cancel Booking - Float ID');
+  const floatIdRes = await request('DELETE', '/bookings/1.5');
+  assertEq(floatIdRes.status, 404, 'Returns 404 for float ID (parsed as 1)');
+
+  // Test 23: Booking with numeric roomId (should work)
+  console.log('\n📋 Test: Create Booking - Numeric roomId');
+  const numericRoomRes = await request('POST', '/bookings', {
+    roomId: 123,
+    startTime: futureDate(11),
+    endTime: futureDate(12),
+  });
+  assertEq(numericRoomRes.status, 201, 'Accepts numeric roomId');
+
+  // Test 24: Partial overlap - new booking starts during existing
+  console.log('\n📋 Test: Create Booking - Partial Overlap Start');
+  // First create a booking
+  await request('POST', '/bookings', {
+    roomId: 'overlap-test',
+    startTime: futureDate(20),
+    endTime: futureDate(22),
+  });
+  // Try to create overlapping booking that starts during existing
+  const partialOverlapStartRes = await request('POST', '/bookings', {
+    roomId: 'overlap-test',
+    startTime: futureDate(21),
+    endTime: futureDate(23),
+  });
+  assertEq(partialOverlapStartRes.status, 409, 'Returns 409 for partial overlap at start');
+
+  // Test 25: Partial overlap - new booking ends during existing
+  console.log('\n📋 Test: Create Booking - Partial Overlap End');
+  const partialOverlapEndRes = await request('POST', '/bookings', {
+    roomId: 'overlap-test',
+    startTime: futureDate(19),
+    endTime: futureDate(21),
+  });
+  assertEq(partialOverlapEndRes.status, 409, 'Returns 409 for partial overlap at end');
+
+  // Test 26: New booking completely contains existing
+  console.log('\n📋 Test: Create Booking - New Contains Existing');
+  const containsRes = await request('POST', '/bookings', {
+    roomId: 'overlap-test',
+    startTime: futureDate(19),
+    endTime: futureDate(23),
+  });
+  assertEq(containsRes.status, 409, 'Returns 409 when new booking contains existing');
+
+  // Test 27: Adjacent bookings should be allowed (end time = start time)
+  console.log('\n📋 Test: Create Booking - Adjacent Bookings');
+  await request('POST', '/bookings', {
+    roomId: 'adjacent-test',
+    startTime: futureDate(30),
+    endTime: futureDate(31),
+  });
+  const adjacentRes = await request('POST', '/bookings', {
+    roomId: 'adjacent-test',
+    startTime: futureDate(31),
+    endTime: futureDate(32),
+  });
+  assertEq(adjacentRes.status, 201, 'Allows adjacent bookings (no gap, no overlap)');
+
+  // Test 28: Very long roomId
+  console.log('\n📋 Test: Create Booking - Very Long roomId');
+  const longRoomId = 'a'.repeat(1000);
+  const longRoomRes = await request('POST', '/bookings', {
+    roomId: longRoomId,
+    startTime: futureDate(40),
+    endTime: futureDate(41),
+  });
+  assertEq(longRoomRes.status, 201, 'Accepts very long roomId');
+
+  // Test 29: Special characters in roomId
+  console.log('\n📋 Test: Create Booking - Special Characters in roomId');
+  const specialRoomRes = await request('POST', '/bookings', {
+    roomId: 'room-with-spëcial_chars!@#$%',
+    startTime: futureDate(42),
+    endTime: futureDate(43),
+  });
+  assertEq(specialRoomRes.status, 201, 'Accepts special characters in roomId');
+
+  // Test 30: List bookings for room with special characters
+  console.log('\n📋 Test: List Bookings - Room With Special Characters');
+  const specialListRes = await request('GET', '/rooms/room-with-spëcial_chars!@#$%/bookings');
+  assertEq(specialListRes.status, 200, 'Returns 200 for room with special characters');
+
+  //
+```
+
+**c:\Users\Viciy\coding\ai-assisted-meeting-room-booking-api\scripts\test-api.js**
+
+```javascript
+`/rooms/${encodeURIComponent('room-with-spëcial_chars!@#$%')}/bookings`);
+  assertEq(specialListRes.status, 200, 'Returns 200 for room with special characters');
+  assert(specialListRes.body.length >= 1, 'Finds the booking
+```
+
+#### 💻 Terminal Commands
+
+**Command:** `npm test`
+**Exit Code:** 1
+
+```
+PS C:\Users\Viciy\coding\ai-assisted-meeting-room-booking-api> npm test
+
+> meeting-room-booking-api@1.0.0 test
+> node scripts/test-api.js
+
+
+🚀 Starting server...
+✅ Server started
+
+🧪 Meeting Room Booking API Tests
+
+==================================================
+
+📋 Test: Health Check
+  ✅ Returns 200 status (expected: 200, got: 200)
+  ✅ Returns status ok (expected: ok, got: ok)
+
+📋 Test: Create Valid Booking
+  ✅ Returns 201 status (expected: 201, got: 201)
+  ✅ Returns booking ID
+  ✅ Returns correct roomId (expected: room-1, got: room-1)
+
+📋 Test: Create Booking - Missing Fields
+  ✅ Returns 400 for missing fields (expected: 400, got: 400)
+
+📋 Test: Create Booking - Past Date
+  ✅ Returns 400 for past booking (expected: 400, got: 400)
+  ✅ Error mentions past
+
+📋 Test: Create Booking - End Before Start
+  ✅ Returns 400 for invalid time range (expected: 400, got: 400)
+
+📋 Test: Create Booking - Overlapping
+  ✅ Returns 409 for overlapping booking (expected: 409, got: 409)
+
+📋 Test: List Bookings for Room
+  ✅ Returns 200 status (expected: 200, got: 200)
+  ✅ Returns an array
+  ✅ Has at least one booking
+
+📋 Test: List Bookings - Empty Room
+  ✅ Returns 200 status (expected: 200, got: 200)
+  ✅ Returns empty array (expected: 0, got: 0)
+
+📋 Test: Cancel Booking
+  ✅ Returns 200 status (expected: 200, got: 200)
+  ✅ Confirms cancellation
+
+📋 Test: Cancel Non-Existent Booking
+  ✅ Returns 404 for non-existent booking (expected: 404, got: 404)
+
+📋 Test: Cancel Invalid ID
+  ✅ Returns 400 for invalid ID (expected: 400, got: 400)
+
+📋 Test: Different Rooms - No Conflict
+  ✅ Different room booking succeeds (expected: 201, got: 201)
+
+📋 Test: Create Booking - Invalid Room ID
+  ✅ Returns 400 for invalid room ID (expected: 400, got: 400)
+
+📋 Test: Create Booking - Null roomId
+  ✅ Returns 400 for null roomId (expected: 400, got: 400)
+
+📋 Test: Create Booking - Null startTime
+  ✅ Returns 400 for null startTime (expected: 400, got: 400)
+
+📋 Test: Create Booking - Null endTime
+  ✅ Returns 400 for null endTime (expected: 400, got: 400)
+
+📋 Test: Create Booking - Empty Object
+  ✅ Returns 400 for empty object (expected: 400, got: 400)
+
+📋 Test: Create Booking - Invalid Date Format
+  ✅ Returns 400 for invalid date format (expected: 400, got: 400)
+
+📋 Test: Create Booking - Same Start and End Time
+  ✅ Returns 400 for same start and end time (expected: 400, got: 400)
+
+📋 Test: Cancel Booking - Negative ID
+  ✅ Returns 404 for negative ID (valid format but not found) (expected: 404, got: 404)
+
+📋 Test: Cancel Booking - Zero ID
+  ✅ Returns 404 for zero ID (valid format but not found) (expected: 404, got: 404)
+
+📋 Test: Cancel Booking - Float ID
+  ✅ Returns 404 for float ID (parsed as 1) (expected: 404, got: 404)
+
+📋 Test: Create Booking - Numeric roomId
+  ✅ Accepts numeric roomId (expected: 201, got: 201)
+
+📋 Test: Create Booking - Partial Overlap Start
+  ✅ Returns 409 for partial overlap at start (expected: 409, got: 409)
+
+📋 Test: Create Booking - Partial Overlap End
+  ✅ Returns 409 for partial overlap at end (expected: 409, got: 409)
+
+📋 Test: Create Booking - New Contains Existing
+  ✅ Returns 409 when new booking contains existing (expected: 409, got: 409)
+
+📋 Test: Create Booking - Adjacent Bookings
+  ✅ Allows adjacent bookings (no gap, no overlap) (expected: 201, got: 201)
+
+📋 Test: Create Booking - Very Long roomId
+  ✅ Accepts very long roomId (expected: 201, got: 201)
+
+📋 Test: Create Booking - Special Characters in roomId
+  ✅ Accepts special characters in roomId (expected: 201, got: 201)
+
+📋 Test: List Bookings - Room With Special Characters
+  ❌ Returns 200 for room with special characters (expected: 200, got: 404)
+
+==================================================
+
+📊 Results: 37 passed, 1 failed
+
+🛑 Server stopped
+[?1004h
+```
+
+**Command:** `npm test`
+**Exit Code:** 0
+
+```
+PS C:\Users\Viciy\coding\ai-assisted-meeting-room-booking-api> npm test
+
+> meeting-room-booking-api@1.0.0 test
+> node scripts/test-api.js
+
+
+🚀 Starting server...
+✅ Server started
+
+🧪 Meeting Room Booking API Tests
+
+==================================================
+
+📋 Test: Health Check
+  ✅ Returns 200 status (expected: 200, got: 200)
+  ✅ Returns status ok (expected: ok, got: ok)
+
+📋 Test: Create Valid Booking
+  ✅ Returns 201 status (expected: 201, got: 201)
+  ✅ Returns booking ID
+  ✅ Returns correct roomId (expected: room-1, got: room-1)
+
+📋 Test: Create Booking - Missing Fields
+  ✅ Returns 400 for missing fields (expected: 400, got: 400)
+
+📋 Test: Create Booking - Past Date
+  ✅ Returns 400 for past booking (expected: 400, got: 400)
+  ✅ Error mentions past
+
+📋 Test: Create Booking - End Before Start
+  ✅ Returns 400 for invalid time range (expected: 400, got: 400)
+
+📋 Test: Create Booking - Overlapping
+  ✅ Returns 409 for overlapping booking (expected: 409, got: 409)
+
+📋 Test: List Bookings for Room
+  ✅ Returns 200 status (expected: 200, got: 200)
+  ✅ Returns an array
+  ✅ Has at least one booking
+
+📋 Test: List Bookings - Empty Room
+  ✅ Returns 200 status (expected: 200, got: 200)
+  ✅ Returns empty array (expected: 0, got: 0)
+
+📋 Test: Cancel Booking
+  ✅ Returns 200 status (expected: 200, got: 200)
+  ✅ Confirms cancellation
+
+📋 Test: Cancel Non-Existent Booking
+  ✅ Returns 404 for non-existent booking (expected: 404, got: 404)
+
+📋 Test: Cancel Invalid ID
+  ✅ Returns 400 for invalid ID (expected: 400, got: 400)
+
+📋 Test: Different Rooms - No Conflict
+  ✅ Different room booking succeeds (expected: 201, got: 201)
+
+📋 Test: Create Booking - Invalid Room ID
+  ✅ Returns 400 for invalid room ID (expected: 400, got: 400)
+
+📋 Test: Create Booking - Null roomId
+  ✅ Returns 400 for null roomId (expected: 400, got: 400)
+
+📋 Test: Create Booking - Null startTime
+  ✅ Returns 400 for null startTime (expected: 400, got: 400)
+
+📋 Test: Create Booking - Null endTime
+  ✅ Returns 400 for null endTime (expected: 400, got: 400)
+
+📋 Test: Create Booking - Empty Object
+  ✅ Returns 400 for empty object (expected: 400, got: 400)
+
+📋 Test: Create Booking - Invalid Date Format
+  ✅ Returns 400 for invalid date format (expected: 400, got: 400)
+
+📋 Test: Create Booking - Same Start and End Time
+  ✅ Returns 400 for same start and end time (expected: 400, got: 400)
+
+📋 Test: Cancel Booking - Negative ID
+  ✅ Returns 404 for negative ID (valid format but not found) (expected: 404, got: 404)
+
+📋 Test: Cancel Booking - Zero ID
+  ✅ Returns 404 for zero ID (valid format but not found) (expected: 404, got: 404)
+
+📋 Test: Cancel Booking - Float ID
+  ✅ Returns 404 for float ID (parsed as 1) (expected: 404, got: 404)
+
+📋 Test: Create Booking - Numeric roomId
+  ✅ Accepts numeric roomId (expected: 201, got: 201)
+
+📋 Test: Create Booking - Partial Overlap Start
+  ✅ Returns 409 for partial overlap at start (expected: 409, got: 409)
+
+📋 Test: Create Booking - Partial Overlap End
+  ✅ Returns 409 for partial overlap at end (expected: 409, got: 409)
+
+📋 Test: Create Booking - New Contains Existing
+  ✅ Returns 409 when new booking contains existing (expected: 409, got: 409)
+
+📋 Test: Create Booking - Adjacent Bookings
+  ✅ Allows adjacent bookings (no gap, no overlap) (expected: 201, got: 201)
+
+📋 Test: Create Booking - Very Long roomId
+  ✅ Accepts very long roomId (expected: 201, got: 201)
+
+📋 Test: Create Booking - Special Characters in roomId
+  ✅ Accepts special characters in roomId (expected: 201, got: 201)
+
+📋 Test: List Bookings - Room With Special Characters
+  ✅ Returns 200 for room with special characters (expected: 200, got: 200)
+  ✅ Finds the booking with special characters
+
+==================================================
+
+📊 Results: 39 passed, 0 failed
+
+🛑 Server stopped
+[?1004h
+```
+
+#### 📝 Response
+
+
+Test 30 failed because the URL encoding of special characters. The room was created with special characters, but the GET request URL doesn't encode them properly. Let me fix the test to use URL encoding: 
+
+All 39 tests pass. I added 17 new edge case tests:
+
+| Test | Category | Description |
+|------|----------|-------------|
+| 14-17 | **Null/Empty** | Null roomId, null startTime, null endTime, empty object |
+| 18 | **Invalid Format** | Invalid date strings |
+| 19 | **Time Logic** | Same start and end time |
+| 20-22 | **ID Edge Cases** | Negative ID, zero ID, float ID |
+| 23 | **Type Coercion** | Numeric roomId (should work) |
+| 24-26 | **Overlap Scenarios** | Partial overlap start, partial overlap end, new contains existing |
+| 27 | **Boundary** | Adjacent bookings (end=start, no overlap) |
+| 28-30 | **String Edge Cases** | Very long roomId (1000 chars), special characters, URL encoding |
+
+---
+
+## Exchange 12
+
+### 👤 User
+
+Should we also check boolean value cases?
+
+### 🤖 Assistant
+
+#### 💭 Thinking
+
+> The user is asking if we should add test cases for boolean values being passed to the API fields (like roomId, startTime, endTime). This is a good edge case to test - what happens if someone passes `true` or `false` instead of proper values.
+> 
+> Let me add tests for boolean cases.
+
+#### 📄 Files Created/Modified
+
+**c:\Users\Viciy\coding\ai-assisted-meeting-room-booking-api\scripts\test-api.js**
+
+```javascript
+============================================
+  // Boolean Value Tests
+  // ============================================
+
+  // Test 31: Boolean true as roomId
+  console.log('\n📋 Test: Create Booking - Boolean true as roomId');
+  const boolTrueRoomRes = await request('POST', '/bookings', {
+    roomId: true,
+    startTime: futureDate(50),
+    endTime: futureDate(51),
+  });
+  // Boolean true becomes string "true" which is valid
+  assertEq(boolTrueRoomRes.status, 201, 'Boolean true roomId is coerced to string');
+
+  // Test 32: Boolean false as roomId
+  console.log('\n📋 Test: Create Booking - Boolean false as roomId');
+  const boolFalseRoomRes = await request('POST', '/bookings', {
+    roomId: false,
+    startTime: futureDate(52),
+    endTime: futureDate(53),
+  });
+  // Boolean false is falsy, should be rejected
+  assertEq(boolFalseRoomRes.status, 400, 'Boolean false roomId is rejected as falsy');
+
+  // Test 33: Boolean as startTime
+  console.log('\n📋 Test: Create Booking - Boolean as startTime');
+  const boolStartRes = await request('POST', '/bookings', {
+    roomId: 'bool-test',
+    startTime: true,
+    endTime: futureDate(54),
+  });
+  assertEq(boolStartRes.status, 400, 'Boolean startTime is rejected as invalid date');
+
+  // Test 34: Boolean as endTime
+  console.log('\n📋 Test: Create Booking - Boolean as endTime');
+  const boolEndRes = await request('POST', '/bookings', {
+    roomId: 'bool-test',
+    startTime: futureDate(55),
+    endTime: false,
+  });
+  assertEq(boolEndRes.status, 400, 'Boolean endTime is rejected');
+
+  // Test 35: All fields as boolean true
+  console.log('\n📋 Test: Create Booking - All Fields Boolean true');
+  const allBoolTrueRes = await request('POST', '/bookings', {
+    roomId: true,
+    startTime: true,
+    endTime: true,
+  });
+  assertEq(allBoolTrueRes.status, 400, 'All boolean true fields rejected (invalid dates)');
+
+  // Test 36: All fields as boolean false
+  console.log('\n📋 Test: Create Booking - All Fields Boolean false');
+  const allBoolFalseRes = await request('POST', '/bookings', {
+    roomId: false,
+    startTime: false,
+    endTime: false,
+  });
+  assertEq(allBoolFalseRes.status, 400, 'All boolean false fields rejected as falsy');
+
+  //
+```
+
+#### 💻 Terminal Commands
+
+**Command:** `npm test`
+**Exit Code:** 0
+
+```
+PS C:\Users\Viciy\coding\ai-assisted-meeting-room-booking-api> npm test
+
+> meeting-room-booking-api@1.0.0 test
+> node scripts/test-api.js
+
+
+🚀 Starting server...
+✅ Server started
+
+🧪 Meeting Room Booking API Tests
+
+==================================================
+
+📋 Test: Health Check
+  ✅ Returns 200 status (expected: 200, got: 200)
+  ✅ Returns status ok (expected: ok, got: ok)
+
+📋 Test: Create Valid Booking
+  ✅ Returns 201 status (expected: 201, got: 201)
+  ✅ Returns booking ID
+  ✅ Returns correct roomId (expected: room-1, got: room-1)
+
+📋 Test: Create Booking - Missing Fields
+  ✅ Returns 400 for missing fields (expected: 400, got: 400)
+
+📋 Test: Create Booking - Past Date
+  ✅ Returns 400 for past booking (expected: 400, got: 400)
+  ✅ Error mentions past
+
+📋 Test: Create Booking - End Before Start
+  ✅ Returns 400 for invalid time range (expected: 400, got: 400)
+
+📋 Test: Create Booking - Overlapping
+  ✅ Returns 409 for overlapping booking (expected: 409, got: 409)
+
+📋 Test: List Bookings for Room
+  ✅ Returns 200 status (expected: 200, got: 200)
+  ✅ Returns an array
+  ✅ Has at least one booking
+
+📋 Test: List Bookings - Empty Room
+  ✅ Returns 200 status (expected: 200, got: 200)
+  ✅ Returns empty array (expected: 0, got: 0)
+
+📋 Test: Cancel Booking
+  ✅ Returns 200 status (expected: 200, got: 200)
+  ✅ Confirms cancellation
+
+📋 Test: Cancel Non-Existent Booking
+  ✅ Returns 404 for non-existent booking (expected: 404, got: 404)
+
+📋 Test: Cancel Invalid ID
+  ✅ Returns 400 for invalid ID (expected: 400, got: 400)
+
+📋 Test: Different Rooms - No Conflict
+  ✅ Different room booking succeeds (expected: 201, got: 201)
+
+📋 Test: Create Booking - Invalid Room ID
+  ✅ Returns 400 for invalid room ID (expected: 400, got: 400)
+
+📋 Test: Create Booking - Null roomId
+  ✅ Returns 400 for null roomId (expected: 400, got: 400)
+
+📋 Test: Create Booking - Null startTime
+  ✅ Returns 400 for null startTime (expected: 400, got: 400)
+
+📋 Test: Create Booking - Null endTime
+  ✅ Returns 400 for null endTime (expected: 400, got: 400)
+
+📋 Test: Create Booking - Empty Object
+  ✅ Returns 400 for empty object (expected: 400, got: 400)
+
+📋 Test: Create Booking - Invalid Date Format
+  ✅ Returns 400 for invalid date format (expected: 400, got: 400)
+
+📋 Test: Create Booking - Same Start and End Time
+  ✅ Returns 400 for same start and end time (expected: 400, got: 400)
+
+📋 Test: Cancel Booking - Negative ID
+  ✅ Returns 404 for negative ID (valid format but not found) (expected: 404, got: 404)
+
+📋 Test: Cancel Booking - Zero ID
+  ✅ Returns 404 for zero ID (valid format but not found) (expected: 404, got: 404)
+
+📋 Test: Cancel Booking - Float ID
+  ✅ Returns 404 for float ID (parsed as 1) (expected: 404, got: 404)
+
+📋 Test: Create Booking - Numeric roomId
+  ✅ Accepts numeric roomId (expected: 201, got: 201)
+
+📋 Test: Create Booking - Partial Overlap Start
+  ✅ Returns 409 for partial overlap at start (expected: 409, got: 409)
+
+📋 Test: Create Booking - Partial Overlap End
+  ✅ Returns 409 for partial overlap at end (expected: 409, got: 409)
+
+📋 Test: Create Booking - New Contains Existing
+  ✅ Returns 409 when new booking contains existing (expected: 409, got: 409)
+
+📋 Test: Create Booking - Adjacent Bookings
+  ✅ Allows adjacent bookings (no gap, no overlap) (expected: 201, got: 201)
+
+📋 Test: Create Booking - Very Long roomId
+  ✅ Accepts very long roomId (expected: 201, got: 201)
+
+📋 Test: Create Booking - Special Characters in roomId
+  ✅ Accepts special characters in roomId (expected: 201, got: 201)
+
+📋 Test: List Bookings - Room With Special Characters
+  ✅ Returns 200 for room with special characters (expected: 200, got: 200)
+  ✅ Finds the booking with special characters
+
+📋 Test: Create Booking - Boolean true as roomId
+  ✅ Boolean true roomId is coerced to string (expected: 201, got: 201)
+
+📋 Test: Create Booking - Boolean false as roomId
+  ✅ Boolean false roomId is rejected as falsy (expected: 400, got: 400)
+
+📋 Test: Create Booking - Boolean as startTime
+  ✅ Boolean startTime is rejected as invalid date (expected: 400, got: 400)
+
+📋 Test: Create Booking - Boolean as endTime
+  ✅ Boolean endTime is rejected (expected: 400, got: 400)
+
+📋 Test: Create Booking - All Fields Boolean true
+  ✅ All boolean true fields rejected (invalid dates) (expected: 400, got: 400)
+
+📋 Test: Create Booking - All Fields Boolean false
+  ✅ All boolean false fields rejected as falsy (expected: 400, got: 400)
+
+==================================================
+
+📊 Results: 45 passed, 0 failed
+
+🛑 Server stopped
+[?1004h
+```
+
+#### 📝 Response
+
+Good idea! Let me add tests for boolean value edge cases: 
+
+All 45 tests pass. Added 6 boolean tests:
+
+| Test | Description | Expected |
+|------|-------------|----------|
+| 31 |  | 201 - coerced to string "true" |
+| 32 |  | 400 - falsy value rejected |
+| 33 |  | 400 - invalid date |
+| 34 |  | 400 - falsy/invalid |
+| 35 | All fields `true` | 400 - dates invalid |
+| 36 | All fields `false` | 400 - all falsy |
+
+The tests reveal that `true` as a roomId gets accepted because JavaScript coerces it to the string `"true"`, which is a valid room name. This is reasonable behavior for a flexible API.
+
+---
+
