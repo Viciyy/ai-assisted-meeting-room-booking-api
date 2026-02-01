@@ -1977,3 +1977,452 @@ The endpoint code is now much cleaner - it just calls `validateBooking()` and ha
 
 ---
 
+## Exchange 9
+
+### 👤 User
+
+Refactor the app.js so that the logic is in multiple files and easier to read and maintain. App.js should contain only the necessary configurations and method calls to get the server running.
+
+### 🤖 Assistant
+
+#### 💭 Thinking
+
+> The user wants me to refactor app.js into multiple files for better organization. I should split it into:
+> 
+> 1. `src/app.js` - Main app configuration and server startup
+> 2. `src/routes/bookings.js` - Booking routes
+> 3. `src/validators/bookingValidators.js` - Business rule validators
+> 4. `src/storage/bookings.js` - In-memory storage and data operations
+> 
+> Let me read the current app.js first to understand the full structure.
+
+#### 🔧 File Operations
+
+- **Created**: `c:\Users\Viciy\coding\ai-assisted-meeting-room-booking-api\src\storage\bookingStore.js`
+- **Created**: `c:\Users\Viciy\coding\ai-assisted-meeting-room-booking-api\src\validators\bookingValidators.js`
+- **Created**: `c:\Users\Viciy\coding\ai-assisted-meeting-room-booking-api\src\routes\bookings.js`
+- **Created**: `c:\Users\Viciy\coding\ai-assisted-meeting-room-booking-api\src\routes\rooms.js`
+
+#### 📄 Files Created/Modified
+
+**c:\Users\Viciy\coding\ai-assisted-meeting-room-booking-api\src\storage\bookingStore.js**
+
+```javascript
+/**
+ * In-memory storage for bookings
+ */
+
+const bookings = [];
+let nextBookingId = 1;
+
+// Helper function to check if two time ranges overlap
+function timesOverlap(start1, end1, start2, end2) {
+  return start1 < end2 && start2 < end1;
+}
+
+/**
+ * Find an overlapping booking for a room
+ */
+function findOverlappingBooking(roomId, startTime, endTime, excludeBookingId = null) {
+  return bookings.find(booking => 
+    booking.roomId === roomId &&
+    booking.id !== excludeBookingId &&
+    timesOverlap(new Date(startTime), new Date(endTime), new Date(booking.startTime), new Date(booking.endTime))
+  );
+}
+
+/**
+ * Get all bookings
+ */
+function getAllBookings() {
+  return bookings;
+}
+
+/**
+ * Get bookings for a specific room, sorted by start time
+ */
+function getBookingsByRoom(roomId) {
+  return bookings
+    .filter(booking => booking.roomId === roomId)
+    .sort((a, b) => new Date(a.startTime) - new Date(b.startTime));
+}
+
+/**
+ * Find a booking by ID
+ */
+function findBookingById(bookingId) {
+  return bookings.find(booking => booking.id === bookingId);
+}
+
+/**
+ * Find booking index by ID
+ */
+function findBookingIndex(bookingId) {
+  return bookings.findIndex(booking => booking.id === bookingId);
+}
+
+/**
+ * Create a new booking
+ */
+function createBooking(roomId, startTime, endTime) {
+  const booking = {
+    id: nextBookingId++,
+    roomId,
+    startTime: new Date(startTime).toISOString(),
+    endTime: new Date(endTime).toISOString(),
+    createdAt: new Date().toISOString()
+  };
+
+  bookings.push(booking);
+  return booking;
+}
+
+/**
+ * Delete a booking by index
+ */
+function deleteBookingByIndex(index) {
+  const [deletedBooking] = bookings.splice(index, 1);
+  return deletedBooking;
+}
+
+module.exports = {
+  findOverlappingBooking,
+  getAllBookings,
+  getBookingsByRoom,
+  findBookingById,
+  findBookingIndex,
+  createBooking,
+  deleteBookingByIndex
+};
+```
+
+**c:\Users\Viciy\coding\ai-assisted-meeting-room-booking-api\src\validators\bookingValidators.js**
+
+```javascript
+/**
+ * Business rule validators for bookings
+ */
+
+const bookingStore = require('../storage/bookingStore');
+
+/**
+ * Validate that all required fields are present
+ */
+function validateRequiredFields(roomId, startTime, endTime) {
+  if (!roomId || !startTime || !endTime) {
+    return { valid: false, error: 'roomId, startTime, and endTime are required', status: 400 };
+  }
+  return { valid: true };
+}
+
+/**
+ * Validate that dates are in valid format
+ */
+function validateDateFormat(startTime, endTime) {
+  const start = new Date(startTime);
+  const end = new Date(endTime);
+  
+  if (isNaN(start.getTime()) || isNaN(end.getTime())) {
+    return { valid: false, error: 'Invalid date format', status: 400 };
+  }
+  return { valid: true, start, end };
+}
+
+/**
+ * Validate that start time is before end time
+ */
+function validateTimeOrder(start, end) {
+  if (start >= end) {
+    return { valid: false, error: 'Start time must be before end time', status: 400 };
+  }
+  return { valid: true };
+}
+
+/**
+ * Validate that booking is not in the past
+ */
+function validateNotInPast(start) {
+  if (start < new Date()) {
+    return { valid: false, error: 'Bookings cannot be in the past', status: 400 };
+  }
+  return { valid: true };
+}
+
+/**
+ * Validate that booking does not overlap with existing bookings
+ */
+function validateNoOverlap(roomId, startTime, endTime) {
+  const overlapping = bookingStore.findOverlappingBooking(roomId, startTime, endTime);
+  if (overlapping) {
+    return { 
+      valid: false, 
+      error: 'Booking overlaps with an existing booking', 
+      status: 409,
+      conflictingBooking: overlapping 
+    };
+  }
+  return { valid: true };
+}
+
+/**
+ * Run all booking validations
+ */
+function validateBooking(roomId, startTime, endTime) {
+  // Check required fields
+  const requiredCheck = validateRequiredFields(roomId, startTime, endTime);
+  if (!requiredCheck.valid) return requiredCheck;
+
+  // Check date format
+  const dateCheck = validateDateFormat(startTime, endTime);
+  if (!dateCheck.valid) return dateCheck;
+
+  const { start, end } = dateCheck;
+
+  // Check time order
+  const orderCheck = validateTimeOrder(start, end);
+  if (!orderCheck.valid) return orderCheck;
+
+  // Check not in past
+  const pastCheck = validateNotInPast(start);
+  if (!pastCheck.valid) return pastCheck;
+
+  // Check no overlap
+  const overlapCheck = validateNoOverlap(roomId, startTime, endTime);
+  if (!overlapCheck.valid) return overlapCheck;
+
+  return { valid: true, start, end };
+}
+
+/**
+ * Validate booking ID format
+ */
+function validateBookingId(id) {
+  const bookingId = parseInt(id, 10);
+  if (isNaN(bookingId)) {
+    return { valid: false, error: 'Invalid booking ID', status: 400 };
+  }
+  return { valid: true, bookingId };
+}
+
+module.exports = {
+  validateRequiredFields,
+  validateDateFormat,
+  validateTimeOrder,
+  validateNotInPast,
+  validateNoOverlap,
+  validateBooking,
+  validateBookingId
+};
+```
+
+**c:\Users\Viciy\coding\ai-assisted-meeting-room-booking-api\src\routes\bookings.js**
+
+```javascript
+/**
+ * Booking routes
+ */
+
+const express = require('express');
+const router = express.Router();
+const bookingStore = require('../storage/bookingStore');
+const validators = require('../validators/bookingValidators');
+
+/**
+ * Create a booking
+ * POST /bookings
+ */
+router.post('/', (req, res) => {
+  const { roomId, startTime, endTime } = req.body;
+
+  // Validate booking
+  const validation = validators.validateBooking(roomId, startTime, endTime);
+  if (!validation.valid) {
+    const response = { error: validation.error };
+    if (validation.conflictingBooking) {
+      response.conflictingBooking = validation.conflictingBooking;
+    }
+    return res.status(validation.status).json(response);
+  }
+
+  // Create the booking
+  const booking = bookingStore.createBooking(roomId, startTime, endTime);
+  res.status(201).json(booking);
+});
+
+/**
+ * Cancel a booking
+ * DELETE /bookings/:id
+ */
+router.delete('/:id', (req, res) => {
+  // Validate booking ID
+  const idValidation = validators.validateBookingId(req.params.id);
+  if (!idValidation.valid) {
+    return res.status(idValidation.status).json({ error: idValidation.error });
+  }
+
+  const { bookingId } = idValidation;
+  const index = bookingStore.findBookingIndex(bookingId);
+
+  if (index === -1) {
+    return res.status(404).json({ error: 'Booking not found' });
+  }
+
+  const cancelledBooking = bookingStore.deleteBookingByIndex(index);
+  res.json({ message: 'Booking cancelled successfully', booking: cancelledBooking });
+});
+
+module.exports = router;
+```
+
+**c:\Users\Viciy\coding\ai-assisted-meeting-room-booking-api\src\routes\rooms.js**
+
+```javascript
+/**
+ * Room routes
+ */
+
+const express = require('express');
+const router = express.Router();
+const bookingStore = require('../storage/bookingStore');
+
+/**
+ * List all bookings for a specific room
+ * GET /rooms/:roomId/bookings
+ */
+router.get('/:roomId/bookings', (req, res) => {
+  const { roomId } = req.params;
+  const roomBookings = bookingStore.getBookingsByRoom(roomId);
+  res.json(roomBookings);
+});
+
+module.exports = router;
+```
+
+**c:\Users\Viciy\coding\ai-assisted-meeting-room-booking-api\src\app.js**
+
+```javascript
+/**
+ * Meeting Room Booking API
+ * Main application entry point
+ */
+
+const express = require('express');
+
+// Import routes
+const bookingRoutes = require('./routes/bookings');
+const roomRoutes = require('./routes/rooms');
+
+// Create Express app
+const app = express();
+
+// Middleware
+app.use(express.json());
+
+// Routes
+app.use('/bookings', bookingRoutes);
+app.use('/rooms', roomRoutes);
+
+// Health check endpoint
+app.get('/health', (req, res) => {
+  res.json({ status: 'ok' });
+});
+
+// Start server
+```
+
+#### 💻 Terminal Commands
+
+**Command:** `npm test`
+**Exit Code:** 0
+
+```
+PS C:\Users\Viciy\coding\ai-assisted-meeting-room-booking-api> npm test
+
+> meeting-room-booking-api@1.0.0 test
+> node scripts/test-api.js
+
+
+🚀 Starting server...
+✅ Server started
+
+🧪 Meeting Room Booking API Tests
+
+==================================================
+
+📋 Test: Health Check
+  ✅ Returns 200 status (expected: 200, got: 200)
+  ✅ Returns status ok (expected: ok, got: ok)
+
+📋 Test: Create Valid Booking
+  ✅ Returns 201 status (expected: 201, got: 201)
+  ✅ Returns booking ID
+  ✅ Returns correct roomId (expected: room-1, got: room-1)
+
+📋 Test: Create Booking - Missing Fields
+  ✅ Returns 400 for missing fields (expected: 400, got: 400)
+
+📋 Test: Create Booking - Past Date
+  ✅ Returns 400 for past booking (expected: 400, got: 400)
+  ✅ Error mentions past
+
+📋 Test: Create Booking - End Before Start
+  ✅ Returns 400 for invalid time range (expected: 400, got: 400)
+
+📋 Test: Create Booking - Overlapping
+  ✅ Returns 409 for overlapping booking (expected: 409, got: 409)
+
+📋 Test: List Bookings for Room
+  ✅ Returns 200 status (expected: 200, got: 200)
+  ✅ Returns an array
+  ✅ Has at least one booking
+
+📋 Test: List Bookings - Empty Room
+  ✅ Returns 200 status (expected: 200, got: 200)
+  ✅ Returns empty array (expected: 0, got: 0)
+
+📋 Test: Cancel Booking
+  ✅ Returns 200 status (expected: 200, got: 200)
+  ✅ Confirms cancellation
+
+📋 Test: Cancel Non-Existent Booking
+  ✅ Returns 404 for non-existent booking (expected: 404, got: 404)
+
+📋 Test: Cancel Invalid ID
+  ✅ Returns 400 for invalid ID (expected: 400, got: 400)
+
+📋 Test: Different Rooms - No Conflict
+  ✅ Different room booking succeeds (expected: 201, got: 201)
+
+==================================================
+
+📊 Results: 20 passed, 0 failed
+
+🛑 Server stopped
+[?1004h
+```
+
+#### 📝 Response
+
+Now I'll create the separate files and refactor app.js: 
+
+All tests pass. The code is now organized into multiple files:
+
+src/
+├── app.js                      # Main app config & server startup (32 lines)
+├── routes/
+│   ├── bookings.js             # POST /bookings, DELETE /bookings/:id
+│   └── rooms.js                # GET /rooms/:roomId/bookings
+├── storage/
+│   └── bookingStore.js         # In-memory data storage & CRUD operations
+└── validators/
+    └── bookingValidators.js    # All business rule validation logic
+| File | Responsibility |
+|------|----------------|
+| [src/app.js] | Express config, middleware, route mounting, server startup |
+| [src/routes/bookings.js] | Booking endpoints (create, cancel) |
+| [src/routes/rooms.js] | Room endpoints (list bookings) |
+| [src/storage/bookingStore.js] | Data storage and CRUD operations |
+| [src/validators/bookingValidators.js] | Business rule validation |
+
+---
+
