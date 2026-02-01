@@ -1,11 +1,62 @@
 /**
  * Simple API test script - no external dependencies
- * Usage: Start the server first (npm start), then run: node scripts/test-api.js
+ * Automatically starts and stops the server for each test run
  */
 
 const http = require('http');
+const { spawn, execSync } = require('child_process');
+const path = require('path');
 
 const BASE_URL = 'http://localhost:3000';
+const PORT = 3000;
+let serverProcess = null;
+
+// Kill any process using the port (Windows)
+function killProcessOnPort() {
+  try {
+    // Find and kill process on port 3000 (Windows)
+    const cmd = `for /f "tokens=5" %a in ('netstat -ano ^| findstr :${PORT} ^| findstr LISTENING') do taskkill /F /PID %a`;
+    execSync(cmd, { shell: 'cmd.exe', stdio: 'ignore' });
+  } catch {
+    // Ignore errors - no process may be running
+  }
+}
+
+// Start the server
+function startServer() {
+  return new Promise((resolve, reject) => {
+    // First, kill any existing process on the port
+    killProcessOnPort();
+
+    const serverPath = path.join(__dirname, '..', 'src', 'app.js');
+    serverProcess = spawn('node', [serverPath], {
+      stdio: ['pipe', 'pipe', 'pipe'],
+    });
+
+    serverProcess.stdout.on('data', (data) => {
+      if (data.toString().includes('running on port')) {
+        resolve();
+      }
+    });
+
+    serverProcess.stderr.on('data', (data) => {
+      console.error(`Server error: ${data}`);
+    });
+
+    serverProcess.on('error', reject);
+
+    // Timeout if server doesn't start in 5 seconds
+    setTimeout(() => reject(new Error('Server start timeout')), 5000);
+  });
+}
+
+// Stop the server
+function stopServer() {
+  if (serverProcess) {
+    serverProcess.kill();
+    serverProcess = null;
+  }
+}
 
 // Helper to make HTTP requests
 function request(method, path, body = null) {
@@ -78,7 +129,16 @@ function pastDate(hoursAgo) {
 
 // Test cases
 async function runTests() {
-  console.log('\n🧪 Meeting Room Booking API Tests\n');
+  console.log('\n🚀 Starting server...');
+  try {
+    await startServer();
+    console.log('✅ Server started\n');
+  } catch (e) {
+    console.error(`❌ Failed to start server: ${e.message}`);
+    process.exit(1);
+  }
+
+  console.log('🧪 Meeting Room Booking API Tests\n');
   console.log('='.repeat(50));
 
   // Test 1: Health check
@@ -89,7 +149,7 @@ async function runTests() {
     assertEq(res.body.status, 'ok', 'Returns status ok');
   } catch (e) {
     console.log(`  ❌ Health check failed: ${e.message}`);
-    console.log('\n⚠️  Is the server running? Start it with: npm start\n');
+    stopServer();
     process.exit(1);
   }
 
@@ -185,6 +245,9 @@ async function runTests() {
   console.log('\n' + '='.repeat(50));
   console.log(`\n📊 Results: ${passed} passed, ${failed} failed\n`);
 
+  stopServer();
+  console.log('🛑 Server stopped\n');
+
   if (failed > 0) {
     process.exit(1);
   }
@@ -192,5 +255,6 @@ async function runTests() {
 
 runTests().catch((err) => {
   console.error('Test error:', err);
+  stopServer();
   process.exit(1);
 });
