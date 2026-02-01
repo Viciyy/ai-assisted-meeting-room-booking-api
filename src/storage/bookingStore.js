@@ -38,13 +38,6 @@ function getBookingsByRoom(roomId) {
 }
 
 /**
- * Find a booking by ID
- */
-function findBookingById(bookingId) {
-  return bookings.find(booking => booking.id === bookingId);
-}
-
-/**
  * Find booking index by ID
  */
 function findBookingIndex(bookingId) {
@@ -79,7 +72,6 @@ module.exports = {
   findOverlappingBooking,
   getAllBookings,
   getBookingsByRoom,
-  findBookingById,
   findBookingIndex,
   createBooking,
   deleteBookingByIndex
