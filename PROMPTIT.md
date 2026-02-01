@@ -20,6 +20,7 @@
 - [Exchange 14](#exchange-14): We want a table of contents in the beginning of PROMPTIT....
 - [Exchange 15](#exchange-15): Go through the entire API codebase and see if there's any...
 - [Exchange 16](#exchange-16): To fix the issue number 2 make a new validator for roomId...
+- [Exchange 17](#exchange-17): Considering issue number 7, is there a good way to do inp...
 
 ---
 
@@ -4164,6 +4165,84 @@ All 45 tests pass. Here's a summary of the changes:
 **Refactored ** to use the new  function instead of inline checks.
 
 **Updated ** in [src/routes/rooms.js#L14-L18] to validate the roomId parameter before querying bookings.
+
+---
+
+## Exchange 17
+
+### 👤 User
+
+Considering issue number 7, is there a good way to do input sanitation in the endpoint level (router.post)? Could we simply use an external library to do this?
+
+### 🤖 Assistant
+
+#### 💭 Thinking
+
+> The user is asking about input sanitization for the API endpoints. Issue #7 from my earlier review mentioned that roomId could contain malicious content.
+> 
+> For Express.js APIs, there are several popular libraries for input sanitization:
+> 
+> 1. **express-validator** - Most popular, includes both validation and sanitization
+> 2. **validator.js** - The underlying library used by express-validator
+> 3. **xss** - Specifically for XSS prevention
+> 4. **sanitize-html** - For HTML content sanitization
+> 5. **DOMPurify** - Another XSS prevention library (typically for frontend)
+> 
+> For a REST API like this, the best approach would be:
+> - **express-validator** - It's the most comprehensive and widely used for Express apps. It provides both validation and sanitization in middleware form, which fits perfectly with the router pattern.
+> 
+> Let me explain the options and recommend express-validator since it:
+> 1. Integrates well with Express routers
+> 2. Provides both validation and sanitization
+> 3. Works as middleware (can be added at endpoint level)
+> 4. Has built-in sanitizers like `trim()`, `escape()`, `normalizeEmail()`, etc.
+> 
+> I should explain how it could be used but not implement it unless they ask, since they're just asking for recommendations.
+
+#### 📝 Response
+
+Yes, **express-validator** is the standard library for this in Express. It provides middleware-based sanitization that fits perfectly at the router level.
+
+### Example usage:
+
+```javascript
+const { body, param } = require('express-validator');
+
+// Sanitizers can be chained with validators
+router.post('/',
+  body('roomId').trim().escape(),
+  body('startTime').trim(),
+  body('endTime').trim(),
+  (req, res) => {
+    // req.body values are now sanitized
+  }
+);
+
+router.get('/:roomId/bookings',
+  param('roomId').trim().escape(),
+  (req, res) => {
+    // req.params.roomId is sanitized
+  }
+);
+### Key sanitizers available:
+| Method | Purpose |
+|--------|---------|
+|  | Remove leading/trailing whitespace |
+| `escape()` | Encode `<`, `>`, `&`, `'`, `"` to HTML entities |
+| `normalizeEmail()` | Standardize email format |
+| `toInt()` / `toFloat()` | Convert to number |
+| `toBoolean()` | Convert to boolean |
+| `blacklist(chars)` | Remove specific characters |
+| `whitelist(chars)` | Keep only specific characters |
+
+### Installation:
+```bash
+npm install express-validator
+### For this API specifically:
+-  on  would prevent XSS if the value is ever rendered
+-  on date fields is sufficient since they're parsed by 
+
+Would you like me to integrate express-validator into the codebase?
 
 ---
 
