@@ -11,6 +11,10 @@ function validateRequiredFields(roomId, startTime, endTime) {
   if (!roomId || !startTime || !endTime) {
     return { valid: false, error: 'roomId, startTime, and endTime are required', status: 400 };
   }
+  // Check that roomId is not just whitespace
+  if (typeof roomId === 'string' && roomId.trim() === '') {
+    return { valid: false, error: 'roomId cannot be empty or whitespace', status: 400 };
+  }
   return { valid: true };
 }
 

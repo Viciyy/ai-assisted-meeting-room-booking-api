@@ -2426,3 +2426,106 @@ src/
 
 ---
 
+## Exchange 10
+
+### 👤 User
+
+Test 13 is failing because roomId validation passes wrong IDs as valid ones, fix this problem.
+
+### 🤖 Assistant
+
+#### 💭 Thinking
+
+> The user says Test 13 is failing due to roomId validation issues. Let me first check the test file to see what Test 13 is, and then check the validators to understand the issue.
+
+#### 📄 Files Created/Modified
+
+**c:\Users\Viciy\coding\ai-assisted-meeting-room-booking-api\src\validators\bookingValidators.js**
+
+```javascript
+// Check that roomId is not just whitespace
+  if (typeof roomId === 'string' && roomId.trim() === '') {
+    return { valid: false, error: 'roomId cannot be empty or whitespace', status: 400 };
+  }
+```
+
+#### 💻 Terminal Commands
+
+**Command:** `npm test`
+**Exit Code:** 0
+
+```
+> meeting-room-booking-api@1.0.0 test
+> node scripts/test-api.js
+
+
+🚀 Starting server...
+✅ Server started
+
+🧪 Meeting Room Booking API Tests
+
+==================================================
+
+📋 Test: Health Check
+  ✅ Returns 200 status (expected: 200, got: 200)
+  ✅ Returns status ok (expected: ok, got: ok)
+
+📋 Test: Create Valid Booking
+  ✅ Returns 201 status (expected: 201, got: 201)
+  ✅ Returns booking ID
+  ✅ Returns correct roomId (expected: room-1, got: room-1)
+
+📋 Test: Create Booking - Missing Fields
+  ✅ Returns 400 for missing fields (expected: 400, got: 400)
+
+📋 Test: Create Booking - Past Date
+  ✅ Returns 400 for past booking (expected: 400, got: 400)
+  ✅ Error mentions past
+
+📋 Test: Create Booking - End Before Start
+  ✅ Returns 400 for invalid time range (expected: 400, got: 400)
+
+📋 Test: Create Booking - Overlapping
+  ✅ Returns 409 for overlapping booking (expected: 409, got: 409)
+
+📋 Test: List Bookings for Room
+  ✅ Returns 200 status (expected: 200, got: 200)
+  ✅ Returns an array
+  ✅ Has at least one booking
+
+📋 Test: List Bookings - Empty Room
+  ✅ Returns 200 status (expected: 200, got: 200)
+  ✅ Returns empty array (expected: 0, got: 0)
+
+📋 Test: Cancel Booking
+  ✅ Returns 200 status (expected: 200, got: 200)
+  ✅ Confirms cancellation
+
+📋 Test: Cancel Non-Existent Booking
+  ✅ Returns 404 for non-existent booking (expected: 404, got: 404)
+
+📋 Test: Cancel Invalid ID
+  ✅ Returns 400 for invalid ID (expected: 400, got: 400)
+
+📋 Test: Different Rooms - No Conflict
+  ✅ Different room booking succeeds (expected: 201, got: 201)
+
+📋 Test: Create Booking - Invalid Room ID
+  ✅ Returns 400 for invalid room ID (expected: 400, got: 400)
+
+==================================================
+
+📊 Results: 21 passed, 0 failed
+
+🛑 Server stopped
+[?1004h
+```
+
+#### 📝 Response
+
+I see the issue. Test 13 expects that a roomId of `' '` (just a space) should be rejected with a 400 error, but the current validation only checks if roomId is falsy (), which would pass for a whitespace-only string. Let me fix the validator: 
+
+Fixed. The  function now checks that  is not just whitespace by adding a  check. All 21 tests pass now.
+
+---
+
