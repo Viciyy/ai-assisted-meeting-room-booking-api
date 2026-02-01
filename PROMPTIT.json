@@ -22754,6 +22754,2750 @@
       "contentReferences": [],
       "codeCitations": [],
       "timeSpentWaiting": 2843
+    },
+    {
+      "requestId": "request_f434e28d-1f55-4af2-af08-68a6d9275162",
+      "message": {
+        "parts": [
+          {
+            "range": {
+              "start": 0,
+              "endExclusive": 178
+            },
+            "editorRange": {
+              "startLineNumber": 1,
+              "startColumn": 1,
+              "endLineNumber": 1,
+              "endColumn": 179
+            },
+            "text": "To be able to easily test our API, we should create a minimal test script/app that we can use to verify any changes we make to the API. Do not use any external testing libraries.",
+            "kind": "text"
+          }
+        ],
+        "text": "To be able to easily test our API, we should create a minimal test script/app that we can use to verify any changes we make to the API. Do not use any external testing libraries."
+      },
+      "variableData": {
+        "variables": []
+      },
+      "response": [
+        {
+          "kind": "mcpServersStarting",
+          "didStartServerIds": []
+        },
+        {
+          "kind": "thinking",
+          "value": "The user wants a simple test script to verify the API without using external testing libraries. I'll create a Node.js script that uses the built-in `http` module to make requests to the API and verify the responses.",
+          "id": "1769960036304",
+          "generatedTitle": "Created test API file"
+        },
+        {
+          "kind": "thinking",
+          "value": "",
+          "id": "",
+          "metadata": {
+            "vscodeReasoningDone": true,
+            "stopReason": "other"
+          }
+        },
+        {
+          "kind": "prepareToolInvocation",
+          "toolName": "copilot_createFile"
+        },
+        {
+          "kind": "toolInvocationSerialized",
+          "invocationMessage": {
+            "value": "Creating [](file:///c%3A/Users/Viciy/coding/ai-assisted-meeting-room-booking-api/scripts/test-api.js)",
+            "supportThemeIcons": false,
+            "supportHtml": false,
+            "supportAlertSyntax": false,
+            "uris": {
+              "file:///c%3A/Users/Viciy/coding/ai-assisted-meeting-room-booking-api/scripts/test-api.js": {
+                "$mid": 1,
+                "path": "/c:/Users/Viciy/coding/ai-assisted-meeting-room-booking-api/scripts/test-api.js",
+                "scheme": "file"
+              }
+            }
+          },
+          "pastTenseMessage": {
+            "value": "Created [](file:///c%3A/Users/Viciy/coding/ai-assisted-meeting-room-booking-api/scripts/test-api.js)",
+            "supportThemeIcons": false,
+            "supportHtml": false,
+            "supportAlertSyntax": false,
+            "uris": {
+              "file:///c%3A/Users/Viciy/coding/ai-assisted-meeting-room-booking-api/scripts/test-api.js": {
+                "$mid": 1,
+                "path": "/c:/Users/Viciy/coding/ai-assisted-meeting-room-booking-api/scripts/test-api.js",
+                "scheme": "file"
+              }
+            }
+          },
+          "isConfirmed": {
+            "type": 1
+          },
+          "isComplete": true,
+          "source": {
+            "type": "internal",
+            "label": "Built-In"
+          },
+          "toolCallId": "2777c029-4bca-4064-9cfe-3134251193be",
+          "toolId": "copilot_createFile",
+          "generatedTitle": "Created test API file"
+        },
+        {
+          "kind": "textEditGroup",
+          "uri": {
+            "$mid": 1,
+            "fsPath": "c:\\Users\\Viciy\\coding\\ai-assisted-meeting-room-booking-api\\scripts\\test-api.js",
+            "_sep": 1,
+            "external": "file:///c%3A/Users/Viciy/coding/ai-assisted-meeting-room-booking-api/scripts/test-api.js",
+            "path": "/c:/Users/Viciy/coding/ai-assisted-meeting-room-booking-api/scripts/test-api.js",
+            "scheme": "file"
+          },
+          "edits": [
+            [
+              {
+                "text": "/**",
+                "range": {
+                  "startLineNumber": 1,
+                  "startColumn": 1,
+                  "endLineNumber": 1,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n * Simple API test script - no external dependencies",
+                "range": {
+                  "startLineNumber": 2,
+                  "startColumn": 1,
+                  "endLineNumber": 2,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n * Usage: Start the server first (npm start), then run: node scripts/test-api.js",
+                "range": {
+                  "startLineNumber": 3,
+                  "startColumn": 1,
+                  "endLineNumber": 3,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n */",
+                "range": {
+                  "startLineNumber": 4,
+                  "startColumn": 1,
+                  "endLineNumber": 4,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n",
+                "range": {
+                  "startLineNumber": 5,
+                  "startColumn": 1,
+                  "endLineNumber": 5,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\nconst http = require('http');",
+                "range": {
+                  "startLineNumber": 6,
+                  "startColumn": 1,
+                  "endLineNumber": 6,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n",
+                "range": {
+                  "startLineNumber": 7,
+                  "startColumn": 1,
+                  "endLineNumber": 7,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\nconst BASE_URL = 'http://localhost:3000';",
+                "range": {
+                  "startLineNumber": 8,
+                  "startColumn": 1,
+                  "endLineNumber": 8,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n",
+                "range": {
+                  "startLineNumber": 9,
+                  "startColumn": 1,
+                  "endLineNumber": 9,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n// Helper to make HTTP requests",
+                "range": {
+                  "startLineNumber": 10,
+                  "startColumn": 1,
+                  "endLineNumber": 10,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\nfunction request(method, path, body = null) {",
+                "range": {
+                  "startLineNumber": 11,
+                  "startColumn": 1,
+                  "endLineNumber": 11,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n  return new Promise((resolve, reject) => {",
+                "range": {
+                  "startLineNumber": 12,
+                  "startColumn": 1,
+                  "endLineNumber": 12,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n    const url = new URL(path, BASE_URL);",
+                "range": {
+                  "startLineNumber": 13,
+                  "startColumn": 1,
+                  "endLineNumber": 13,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n    const options = {",
+                "range": {
+                  "startLineNumber": 14,
+                  "startColumn": 1,
+                  "endLineNumber": 14,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n      hostname: url.hostname,",
+                "range": {
+                  "startLineNumber": 15,
+                  "startColumn": 1,
+                  "endLineNumber": 15,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n      port: url.port,",
+                "range": {
+                  "startLineNumber": 16,
+                  "startColumn": 1,
+                  "endLineNumber": 16,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n      path: url.pathname,",
+                "range": {
+                  "startLineNumber": 17,
+                  "startColumn": 1,
+                  "endLineNumber": 17,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n      method,",
+                "range": {
+                  "startLineNumber": 18,
+                  "startColumn": 1,
+                  "endLineNumber": 18,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n      headers: {",
+                "range": {
+                  "startLineNumber": 19,
+                  "startColumn": 1,
+                  "endLineNumber": 19,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n        'Content-Type': 'application/json',",
+                "range": {
+                  "startLineNumber": 20,
+                  "startColumn": 1,
+                  "endLineNumber": 20,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n      },",
+                "range": {
+                  "startLineNumber": 21,
+                  "startColumn": 1,
+                  "endLineNumber": 21,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n    };",
+                "range": {
+                  "startLineNumber": 22,
+                  "startColumn": 1,
+                  "endLineNumber": 22,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n",
+                "range": {
+                  "startLineNumber": 23,
+                  "startColumn": 1,
+                  "endLineNumber": 23,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n    const req = http.request(options, (res) => {",
+                "range": {
+                  "startLineNumber": 24,
+                  "startColumn": 1,
+                  "endLineNumber": 24,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n      let data = '';",
+                "range": {
+                  "startLineNumber": 25,
+                  "startColumn": 1,
+                  "endLineNumber": 25,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n      res.on('data', (chunk) => (data += chunk));",
+                "range": {
+                  "startLineNumber": 26,
+                  "startColumn": 1,
+                  "endLineNumber": 26,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n      res.on('end', () => {",
+                "range": {
+                  "startLineNumber": 27,
+                  "startColumn": 1,
+                  "endLineNumber": 27,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n        let parsed;",
+                "range": {
+                  "startLineNumber": 28,
+                  "startColumn": 1,
+                  "endLineNumber": 28,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n        try {",
+                "range": {
+                  "startLineNumber": 29,
+                  "startColumn": 1,
+                  "endLineNumber": 29,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n          parsed = JSON.parse(data);",
+                "range": {
+                  "startLineNumber": 30,
+                  "startColumn": 1,
+                  "endLineNumber": 30,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n        } catch {",
+                "range": {
+                  "startLineNumber": 31,
+                  "startColumn": 1,
+                  "endLineNumber": 31,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n          parsed = data;",
+                "range": {
+                  "startLineNumber": 32,
+                  "startColumn": 1,
+                  "endLineNumber": 32,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n        }",
+                "range": {
+                  "startLineNumber": 33,
+                  "startColumn": 1,
+                  "endLineNumber": 33,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n        resolve({ status: res.statusCode, body: parsed });",
+                "range": {
+                  "startLineNumber": 34,
+                  "startColumn": 1,
+                  "endLineNumber": 34,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n      });",
+                "range": {
+                  "startLineNumber": 35,
+                  "startColumn": 1,
+                  "endLineNumber": 35,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n    });",
+                "range": {
+                  "startLineNumber": 36,
+                  "startColumn": 1,
+                  "endLineNumber": 36,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n",
+                "range": {
+                  "startLineNumber": 37,
+                  "startColumn": 1,
+                  "endLineNumber": 37,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n    req.on('error', reject);",
+                "range": {
+                  "startLineNumber": 38,
+                  "startColumn": 1,
+                  "endLineNumber": 38,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n",
+                "range": {
+                  "startLineNumber": 39,
+                  "startColumn": 1,
+                  "endLineNumber": 39,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n    if (body) {",
+                "range": {
+                  "startLineNumber": 40,
+                  "startColumn": 1,
+                  "endLineNumber": 40,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n      req.write(JSON.stringify(body));",
+                "range": {
+                  "startLineNumber": 41,
+                  "startColumn": 1,
+                  "endLineNumber": 41,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n    }",
+                "range": {
+                  "startLineNumber": 42,
+                  "startColumn": 1,
+                  "endLineNumber": 42,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n    req.end();",
+                "range": {
+                  "startLineNumber": 43,
+                  "startColumn": 1,
+                  "endLineNumber": 43,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n  });",
+                "range": {
+                  "startLineNumber": 44,
+                  "startColumn": 1,
+                  "endLineNumber": 44,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n}",
+                "range": {
+                  "startLineNumber": 45,
+                  "startColumn": 1,
+                  "endLineNumber": 45,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n",
+                "range": {
+                  "startLineNumber": 46,
+                  "startColumn": 1,
+                  "endLineNumber": 46,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n// Test utilities",
+                "range": {
+                  "startLineNumber": 47,
+                  "startColumn": 1,
+                  "endLineNumber": 47,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\nlet passed = 0;",
+                "range": {
+                  "startLineNumber": 48,
+                  "startColumn": 1,
+                  "endLineNumber": 48,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\nlet failed = 0;",
+                "range": {
+                  "startLineNumber": 49,
+                  "startColumn": 1,
+                  "endLineNumber": 49,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n",
+                "range": {
+                  "startLineNumber": 50,
+                  "startColumn": 1,
+                  "endLineNumber": 50,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\nfunction assert(condition, message) {",
+                "range": {
+                  "startLineNumber": 51,
+                  "startColumn": 1,
+                  "endLineNumber": 51,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n  if (condition) {",
+                "range": {
+                  "startLineNumber": 52,
+                  "startColumn": 1,
+                  "endLineNumber": 52,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n    console.log(`  ✅ ${message}`);",
+                "range": {
+                  "startLineNumber": 53,
+                  "startColumn": 1,
+                  "endLineNumber": 53,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n    passed++;",
+                "range": {
+                  "startLineNumber": 54,
+                  "startColumn": 1,
+                  "endLineNumber": 54,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n  } else {",
+                "range": {
+                  "startLineNumber": 55,
+                  "startColumn": 1,
+                  "endLineNumber": 55,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n    console.log(`  ❌ ${message}`);",
+                "range": {
+                  "startLineNumber": 56,
+                  "startColumn": 1,
+                  "endLineNumber": 56,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n    failed++;",
+                "range": {
+                  "startLineNumber": 57,
+                  "startColumn": 1,
+                  "endLineNumber": 57,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n  }",
+                "range": {
+                  "startLineNumber": 58,
+                  "startColumn": 1,
+                  "endLineNumber": 58,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n}",
+                "range": {
+                  "startLineNumber": 59,
+                  "startColumn": 1,
+                  "endLineNumber": 59,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n",
+                "range": {
+                  "startLineNumber": 60,
+                  "startColumn": 1,
+                  "endLineNumber": 60,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\nfunction assertEq(actual, expected, message) {",
+                "range": {
+                  "startLineNumber": 61,
+                  "startColumn": 1,
+                  "endLineNumber": 61,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n  assert(actual === expected, `${message} (expected: ${expected}, got: ${actual})`);",
+                "range": {
+                  "startLineNumber": 62,
+                  "startColumn": 1,
+                  "endLineNumber": 62,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n}",
+                "range": {
+                  "startLineNumber": 63,
+                  "startColumn": 1,
+                  "endLineNumber": 63,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n",
+                "range": {
+                  "startLineNumber": 64,
+                  "startColumn": 1,
+                  "endLineNumber": 64,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n// Get a future date (hours from now)",
+                "range": {
+                  "startLineNumber": 65,
+                  "startColumn": 1,
+                  "endLineNumber": 65,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\nfunction futureDate(hoursFromNow) {",
+                "range": {
+                  "startLineNumber": 66,
+                  "startColumn": 1,
+                  "endLineNumber": 66,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n  const date = new Date();",
+                "range": {
+                  "startLineNumber": 67,
+                  "startColumn": 1,
+                  "endLineNumber": 67,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n  date.setHours(date.getHours() + hoursFromNow);",
+                "range": {
+                  "startLineNumber": 68,
+                  "startColumn": 1,
+                  "endLineNumber": 68,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n  return date.toISOString();",
+                "range": {
+                  "startLineNumber": 69,
+                  "startColumn": 1,
+                  "endLineNumber": 69,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n}",
+                "range": {
+                  "startLineNumber": 70,
+                  "startColumn": 1,
+                  "endLineNumber": 70,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n",
+                "range": {
+                  "startLineNumber": 71,
+                  "startColumn": 1,
+                  "endLineNumber": 71,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n// Get a past date",
+                "range": {
+                  "startLineNumber": 72,
+                  "startColumn": 1,
+                  "endLineNumber": 72,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\nfunction pastDate(hoursAgo) {",
+                "range": {
+                  "startLineNumber": 73,
+                  "startColumn": 1,
+                  "endLineNumber": 73,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n  const date = new Date();",
+                "range": {
+                  "startLineNumber": 74,
+                  "startColumn": 1,
+                  "endLineNumber": 74,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n  date.setHours(date.getHours() - hoursAgo);",
+                "range": {
+                  "startLineNumber": 75,
+                  "startColumn": 1,
+                  "endLineNumber": 75,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n  return date.toISOString();",
+                "range": {
+                  "startLineNumber": 76,
+                  "startColumn": 1,
+                  "endLineNumber": 76,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n}",
+                "range": {
+                  "startLineNumber": 77,
+                  "startColumn": 1,
+                  "endLineNumber": 77,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n",
+                "range": {
+                  "startLineNumber": 78,
+                  "startColumn": 1,
+                  "endLineNumber": 78,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n// Test cases",
+                "range": {
+                  "startLineNumber": 79,
+                  "startColumn": 1,
+                  "endLineNumber": 79,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\nasync function runTests() {",
+                "range": {
+                  "startLineNumber": 80,
+                  "startColumn": 1,
+                  "endLineNumber": 80,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n  console.log('\\n🧪 Meeting Room Booking API Tests\\n');",
+                "range": {
+                  "startLineNumber": 81,
+                  "startColumn": 1,
+                  "endLineNumber": 81,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n  console.log('='.repeat(50));",
+                "range": {
+                  "startLineNumber": 82,
+                  "startColumn": 1,
+                  "endLineNumber": 82,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n",
+                "range": {
+                  "startLineNumber": 83,
+                  "startColumn": 1,
+                  "endLineNumber": 83,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n  // Test 1: Health check",
+                "range": {
+                  "startLineNumber": 84,
+                  "startColumn": 1,
+                  "endLineNumber": 84,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n  console.log('\\n📋 Test: Health Check');",
+                "range": {
+                  "startLineNumber": 85,
+                  "startColumn": 1,
+                  "endLineNumber": 85,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n  try {",
+                "range": {
+                  "startLineNumber": 86,
+                  "startColumn": 1,
+                  "endLineNumber": 86,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n    const res = await request('GET', '/health');",
+                "range": {
+                  "startLineNumber": 87,
+                  "startColumn": 1,
+                  "endLineNumber": 87,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n    assertEq(res.status, 200, 'Returns 200 status');",
+                "range": {
+                  "startLineNumber": 88,
+                  "startColumn": 1,
+                  "endLineNumber": 88,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n    assertEq(res.body.status, 'ok', 'Returns status ok');",
+                "range": {
+                  "startLineNumber": 89,
+                  "startColumn": 1,
+                  "endLineNumber": 89,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n  } catch (e) {",
+                "range": {
+                  "startLineNumber": 90,
+                  "startColumn": 1,
+                  "endLineNumber": 90,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n    console.log(`  ❌ Health check failed: ${e.message}`);",
+                "range": {
+                  "startLineNumber": 91,
+                  "startColumn": 1,
+                  "endLineNumber": 91,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n    console.log('\\n⚠️  Is the server running? Start it with: npm start\\n');",
+                "range": {
+                  "startLineNumber": 92,
+                  "startColumn": 1,
+                  "endLineNumber": 92,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n    process.exit(1);",
+                "range": {
+                  "startLineNumber": 93,
+                  "startColumn": 1,
+                  "endLineNumber": 93,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n  }",
+                "range": {
+                  "startLineNumber": 94,
+                  "startColumn": 1,
+                  "endLineNumber": 94,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n",
+                "range": {
+                  "startLineNumber": 95,
+                  "startColumn": 1,
+                  "endLineNumber": 95,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n  // Test 2: Create a valid booking",
+                "range": {
+                  "startLineNumber": 96,
+                  "startColumn": 1,
+                  "endLineNumber": 96,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n  console.log('\\n📋 Test: Create Valid Booking');",
+                "range": {
+                  "startLineNumber": 97,
+                  "startColumn": 1,
+                  "endLineNumber": 97,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n  const booking1 = {",
+                "range": {
+                  "startLineNumber": 98,
+                  "startColumn": 1,
+                  "endLineNumber": 98,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n    roomId: 'room-1',",
+                "range": {
+                  "startLineNumber": 99,
+                  "startColumn": 1,
+                  "endLineNumber": 99,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n    startTime: futureDate(1),",
+                "range": {
+                  "startLineNumber": 100,
+                  "startColumn": 1,
+                  "endLineNumber": 100,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n    endTime: futureDate(2),",
+                "range": {
+                  "startLineNumber": 101,
+                  "startColumn": 1,
+                  "endLineNumber": 101,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n  };",
+                "range": {
+                  "startLineNumber": 102,
+                  "startColumn": 1,
+                  "endLineNumber": 102,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n  const createRes = await request('POST', '/bookings', booking1);",
+                "range": {
+                  "startLineNumber": 103,
+                  "startColumn": 1,
+                  "endLineNumber": 103,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n  assertEq(createRes.status, 201, 'Returns 201 status');",
+                "range": {
+                  "startLineNumber": 104,
+                  "startColumn": 1,
+                  "endLineNumber": 104,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n  assert(createRes.body.id !== undefined, 'Returns booking ID');",
+                "range": {
+                  "startLineNumber": 105,
+                  "startColumn": 1,
+                  "endLineNumber": 105,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n  assertEq(createRes.body.roomId, 'room-1', 'Returns correct roomId');",
+                "range": {
+                  "startLineNumber": 106,
+                  "startColumn": 1,
+                  "endLineNumber": 106,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n  const bookingId = createRes.body.id;",
+                "range": {
+                  "startLineNumber": 107,
+                  "startColumn": 1,
+                  "endLineNumber": 107,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n",
+                "range": {
+                  "startLineNumber": 108,
+                  "startColumn": 1,
+                  "endLineNumber": 108,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n  // Test 3: Create booking with missing fields",
+                "range": {
+                  "startLineNumber": 109,
+                  "startColumn": 1,
+                  "endLineNumber": 109,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n  console.log('\\n📋 Test: Create Booking - Missing Fields');",
+                "range": {
+                  "startLineNumber": 110,
+                  "startColumn": 1,
+                  "endLineNumber": 110,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n  const missingRes = await request('POST', '/bookings', { roomId: 'room-1' });",
+                "range": {
+                  "startLineNumber": 111,
+                  "startColumn": 1,
+                  "endLineNumber": 111,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n  assertEq(missingRes.status, 400, 'Returns 400 for missing fields');",
+                "range": {
+                  "startLineNumber": 112,
+                  "startColumn": 1,
+                  "endLineNumber": 112,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n",
+                "range": {
+                  "startLineNumber": 113,
+                  "startColumn": 1,
+                  "endLineNumber": 113,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n  // Test 4: Create booking in the past",
+                "range": {
+                  "startLineNumber": 114,
+                  "startColumn": 1,
+                  "endLineNumber": 114,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n  console.log('\\n📋 Test: Create Booking - Past Date');",
+                "range": {
+                  "startLineNumber": 115,
+                  "startColumn": 1,
+                  "endLineNumber": 115,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n  const pastBooking = {",
+                "range": {
+                  "startLineNumber": 116,
+                  "startColumn": 1,
+                  "endLineNumber": 116,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n    roomId: 'room-2',",
+                "range": {
+                  "startLineNumber": 117,
+                  "startColumn": 1,
+                  "endLineNumber": 117,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n    startTime: pastDate(2),",
+                "range": {
+                  "startLineNumber": 118,
+                  "startColumn": 1,
+                  "endLineNumber": 118,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n    endTime: pastDate(1),",
+                "range": {
+                  "startLineNumber": 119,
+                  "startColumn": 1,
+                  "endLineNumber": 119,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n  };",
+                "range": {
+                  "startLineNumber": 120,
+                  "startColumn": 1,
+                  "endLineNumber": 120,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n  const pastRes = await request('POST', '/bookings', pastBooking);",
+                "range": {
+                  "startLineNumber": 121,
+                  "startColumn": 1,
+                  "endLineNumber": 121,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n  assertEq(pastRes.status, 400, 'Returns 400 for past booking');",
+                "range": {
+                  "startLineNumber": 122,
+                  "startColumn": 1,
+                  "endLineNumber": 122,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n  assert(pastRes.body.error.includes('past'), 'Error mentions past');",
+                "range": {
+                  "startLineNumber": 123,
+                  "startColumn": 1,
+                  "endLineNumber": 123,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n",
+                "range": {
+                  "startLineNumber": 124,
+                  "startColumn": 1,
+                  "endLineNumber": 124,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n  // Test 5: Create booking with end before start",
+                "range": {
+                  "startLineNumber": 125,
+                  "startColumn": 1,
+                  "endLineNumber": 125,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n  console.log('\\n📋 Test: Create Booking - End Before Start');",
+                "range": {
+                  "startLineNumber": 126,
+                  "startColumn": 1,
+                  "endLineNumber": 126,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n  const invalidBooking = {",
+                "range": {
+                  "startLineNumber": 127,
+                  "startColumn": 1,
+                  "endLineNumber": 127,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n    roomId: 'room-2',",
+                "range": {
+                  "startLineNumber": 128,
+                  "startColumn": 1,
+                  "endLineNumber": 128,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n    startTime: futureDate(3),",
+                "range": {
+                  "startLineNumber": 129,
+                  "startColumn": 1,
+                  "endLineNumber": 129,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n    endTime: futureDate(2),",
+                "range": {
+                  "startLineNumber": 130,
+                  "startColumn": 1,
+                  "endLineNumber": 130,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n  };",
+                "range": {
+                  "startLineNumber": 131,
+                  "startColumn": 1,
+                  "endLineNumber": 131,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n  const invalidRes = await request('POST', '/bookings', invalidBooking);",
+                "range": {
+                  "startLineNumber": 132,
+                  "startColumn": 1,
+                  "endLineNumber": 132,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n  assertEq(invalidRes.status, 400, 'Returns 400 for invalid time range');",
+                "range": {
+                  "startLineNumber": 133,
+                  "startColumn": 1,
+                  "endLineNumber": 133,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n",
+                "range": {
+                  "startLineNumber": 134,
+                  "startColumn": 1,
+                  "endLineNumber": 134,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n  // Test 6: Create overlapping booking",
+                "range": {
+                  "startLineNumber": 135,
+                  "startColumn": 1,
+                  "endLineNumber": 135,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n  console.log('\\n📋 Test: Create Booking - Overlapping');",
+                "range": {
+                  "startLineNumber": 136,
+                  "startColumn": 1,
+                  "endLineNumber": 136,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n  const overlappingBooking = {",
+                "range": {
+                  "startLineNumber": 137,
+                  "startColumn": 1,
+                  "endLineNumber": 137,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n    roomId: 'room-1',",
+                "range": {
+                  "startLineNumber": 138,
+                  "startColumn": 1,
+                  "endLineNumber": 138,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n    startTime: futureDate(1),",
+                "range": {
+                  "startLineNumber": 139,
+                  "startColumn": 1,
+                  "endLineNumber": 139,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n    endTime: futureDate(2),",
+                "range": {
+                  "startLineNumber": 140,
+                  "startColumn": 1,
+                  "endLineNumber": 140,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n  };",
+                "range": {
+                  "startLineNumber": 141,
+                  "startColumn": 1,
+                  "endLineNumber": 141,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n  const overlapRes = await request('POST', '/bookings', overlappingBooking);",
+                "range": {
+                  "startLineNumber": 142,
+                  "startColumn": 1,
+                  "endLineNumber": 142,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n  assertEq(overlapRes.status, 409, 'Returns 409 for overlapping booking');",
+                "range": {
+                  "startLineNumber": 143,
+                  "startColumn": 1,
+                  "endLineNumber": 143,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n",
+                "range": {
+                  "startLineNumber": 144,
+                  "startColumn": 1,
+                  "endLineNumber": 144,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n  // Test 7: List bookings for a room",
+                "range": {
+                  "startLineNumber": 145,
+                  "startColumn": 1,
+                  "endLineNumber": 145,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n  console.log('\\n📋 Test: List Bookings for Room');",
+                "range": {
+                  "startLineNumber": 146,
+                  "startColumn": 1,
+                  "endLineNumber": 146,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n  const listRes = await request('GET', '/rooms/room-1/bookings');",
+                "range": {
+                  "startLineNumber": 147,
+                  "startColumn": 1,
+                  "endLineNumber": 147,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n  assertEq(listRes.status, 200, 'Returns 200 status');",
+                "range": {
+                  "startLineNumber": 148,
+                  "startColumn": 1,
+                  "endLineNumber": 148,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n  assert(Array.isArray(listRes.body), 'Returns an array');",
+                "range": {
+                  "startLineNumber": 149,
+                  "startColumn": 1,
+                  "endLineNumber": 149,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n  assert(listRes.body.length >= 1, 'Has at least one booking');",
+                "range": {
+                  "startLineNumber": 150,
+                  "startColumn": 1,
+                  "endLineNumber": 150,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n",
+                "range": {
+                  "startLineNumber": 151,
+                  "startColumn": 1,
+                  "endLineNumber": 151,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n  // Test 8: List bookings for empty room",
+                "range": {
+                  "startLineNumber": 152,
+                  "startColumn": 1,
+                  "endLineNumber": 152,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n  console.log('\\n📋 Test: List Bookings - Empty Room');",
+                "range": {
+                  "startLineNumber": 153,
+                  "startColumn": 1,
+                  "endLineNumber": 153,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n  const emptyListRes = await request('GET', '/rooms/empty-room/bookings');",
+                "range": {
+                  "startLineNumber": 154,
+                  "startColumn": 1,
+                  "endLineNumber": 154,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n  assertEq(emptyListRes.status, 200, 'Returns 200 status');",
+                "range": {
+                  "startLineNumber": 155,
+                  "startColumn": 1,
+                  "endLineNumber": 155,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n  assertEq(emptyListRes.body.length, 0, 'Returns empty array');",
+                "range": {
+                  "startLineNumber": 156,
+                  "startColumn": 1,
+                  "endLineNumber": 156,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n",
+                "range": {
+                  "startLineNumber": 157,
+                  "startColumn": 1,
+                  "endLineNumber": 157,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n  // Test 9: Cancel booking",
+                "range": {
+                  "startLineNumber": 158,
+                  "startColumn": 1,
+                  "endLineNumber": 158,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n  console.log('\\n📋 Test: Cancel Booking');",
+                "range": {
+                  "startLineNumber": 159,
+                  "startColumn": 1,
+                  "endLineNumber": 159,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n  const cancelRes = await request('DELETE', `/bookings/${bookingId}`);",
+                "range": {
+                  "startLineNumber": 160,
+                  "startColumn": 1,
+                  "endLineNumber": 160,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n  assertEq(cancelRes.status, 200, 'Returns 200 status');",
+                "range": {
+                  "startLineNumber": 161,
+                  "startColumn": 1,
+                  "endLineNumber": 161,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n  assert(cancelRes.body.message.includes('cancelled'), 'Confirms cancellation');",
+                "range": {
+                  "startLineNumber": 162,
+                  "startColumn": 1,
+                  "endLineNumber": 162,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n",
+                "range": {
+                  "startLineNumber": 163,
+                  "startColumn": 1,
+                  "endLineNumber": 163,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n  // Test 10: Cancel non-existent booking",
+                "range": {
+                  "startLineNumber": 164,
+                  "startColumn": 1,
+                  "endLineNumber": 164,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n  console.log('\\n📋 Test: Cancel Non-Existent Booking');",
+                "range": {
+                  "startLineNumber": 165,
+                  "startColumn": 1,
+                  "endLineNumber": 165,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n  const notFoundRes = await request('DELETE', '/bookings/99999');",
+                "range": {
+                  "startLineNumber": 166,
+                  "startColumn": 1,
+                  "endLineNumber": 166,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n  assertEq(notFoundRes.status, 404, 'Returns 404 for non-existent booking');",
+                "range": {
+                  "startLineNumber": 167,
+                  "startColumn": 1,
+                  "endLineNumber": 167,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n",
+                "range": {
+                  "startLineNumber": 168,
+                  "startColumn": 1,
+                  "endLineNumber": 168,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n  // Test 11: Cancel with invalid ID",
+                "range": {
+                  "startLineNumber": 169,
+                  "startColumn": 1,
+                  "endLineNumber": 169,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n  console.log('\\n📋 Test: Cancel Invalid ID');",
+                "range": {
+                  "startLineNumber": 170,
+                  "startColumn": 1,
+                  "endLineNumber": 170,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n  const invalidIdRes = await request('DELETE', '/bookings/invalid');",
+                "range": {
+                  "startLineNumber": 171,
+                  "startColumn": 1,
+                  "endLineNumber": 171,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n  assertEq(invalidIdRes.status, 400, 'Returns 400 for invalid ID');",
+                "range": {
+                  "startLineNumber": 172,
+                  "startColumn": 1,
+                  "endLineNumber": 172,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n",
+                "range": {
+                  "startLineNumber": 173,
+                  "startColumn": 1,
+                  "endLineNumber": 173,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n  // Test 12: Booking in different room should not conflict",
+                "range": {
+                  "startLineNumber": 174,
+                  "startColumn": 1,
+                  "endLineNumber": 174,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n  console.log('\\n📋 Test: Different Rooms - No Conflict');",
+                "range": {
+                  "startLineNumber": 175,
+                  "startColumn": 1,
+                  "endLineNumber": 175,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n  const room2Booking = {",
+                "range": {
+                  "startLineNumber": 176,
+                  "startColumn": 1,
+                  "endLineNumber": 176,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n    roomId: 'room-2',",
+                "range": {
+                  "startLineNumber": 177,
+                  "startColumn": 1,
+                  "endLineNumber": 177,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n    startTime: futureDate(1),",
+                "range": {
+                  "startLineNumber": 178,
+                  "startColumn": 1,
+                  "endLineNumber": 178,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n    endTime: futureDate(2),",
+                "range": {
+                  "startLineNumber": 179,
+                  "startColumn": 1,
+                  "endLineNumber": 179,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n  };",
+                "range": {
+                  "startLineNumber": 180,
+                  "startColumn": 1,
+                  "endLineNumber": 180,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n  const room2Res = await request('POST', '/bookings', room2Booking);",
+                "range": {
+                  "startLineNumber": 181,
+                  "startColumn": 1,
+                  "endLineNumber": 181,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n  assertEq(room2Res.status, 201, 'Different room booking succeeds');",
+                "range": {
+                  "startLineNumber": 182,
+                  "startColumn": 1,
+                  "endLineNumber": 182,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n",
+                "range": {
+                  "startLineNumber": 183,
+                  "startColumn": 1,
+                  "endLineNumber": 183,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n  // Summary",
+                "range": {
+                  "startLineNumber": 184,
+                  "startColumn": 1,
+                  "endLineNumber": 184,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n  console.log('\\n' + '='.repeat(50));",
+                "range": {
+                  "startLineNumber": 185,
+                  "startColumn": 1,
+                  "endLineNumber": 185,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n  console.log(`\\n📊 Results: ${passed} passed, ${failed} failed\\n`);",
+                "range": {
+                  "startLineNumber": 186,
+                  "startColumn": 1,
+                  "endLineNumber": 186,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n",
+                "range": {
+                  "startLineNumber": 187,
+                  "startColumn": 1,
+                  "endLineNumber": 187,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n  if (failed > 0) {",
+                "range": {
+                  "startLineNumber": 188,
+                  "startColumn": 1,
+                  "endLineNumber": 188,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n    process.exit(1);",
+                "range": {
+                  "startLineNumber": 189,
+                  "startColumn": 1,
+                  "endLineNumber": 189,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n  }",
+                "range": {
+                  "startLineNumber": 190,
+                  "startColumn": 1,
+                  "endLineNumber": 190,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n}",
+                "range": {
+                  "startLineNumber": 191,
+                  "startColumn": 1,
+                  "endLineNumber": 191,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n",
+                "range": {
+                  "startLineNumber": 192,
+                  "startColumn": 1,
+                  "endLineNumber": 192,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\nrunTests().catch((err) => {",
+                "range": {
+                  "startLineNumber": 193,
+                  "startColumn": 1,
+                  "endLineNumber": 193,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n  console.error('Test error:', err);",
+                "range": {
+                  "startLineNumber": 194,
+                  "startColumn": 1,
+                  "endLineNumber": 194,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n  process.exit(1);",
+                "range": {
+                  "startLineNumber": 195,
+                  "startColumn": 1,
+                  "endLineNumber": 195,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n});",
+                "range": {
+                  "startLineNumber": 196,
+                  "startColumn": 1,
+                  "endLineNumber": 196,
+                  "endColumn": 1
+                }
+              }
+            ],
+            [
+              {
+                "text": "\n",
+                "range": {
+                  "startLineNumber": 197,
+                  "startColumn": 1,
+                  "endLineNumber": 197,
+                  "endColumn": 1
+                }
+              }
+            ],
+            []
+          ],
+          "done": true
+        },
+        {
+          "kind": "prepareToolInvocation",
+          "toolName": "copilot_replaceString"
+        },
+        {
+          "kind": "toolInvocationSerialized",
+          "presentation": "hiddenAfterComplete",
+          "invocationMessage": "Using \"Replace String in File\"",
+          "isConfirmed": {
+            "type": 4
+          },
+          "isComplete": true,
+          "source": {
+            "type": "internal",
+            "label": "Built-In"
+          },
+          "toolCallId": "f30fab4c-414e-4de1-b5a9-7c90e4cf51f8",
+          "toolId": "copilot_replaceString"
+        },
+        {
+          "value": "\n```\n",
+          "supportThemeIcons": false,
+          "supportHtml": false,
+          "supportAlertSyntax": false,
+          "uris": {}
+        },
+        {
+          "id": "39b80ece-7042-4d73-99c4-a62a1337773b",
+          "kind": "undoStop"
+        },
+        {
+          "kind": "codeblockUri",
+          "uri": {
+            "$mid": 1,
+            "fsPath": "c:\\Users\\Viciy\\coding\\ai-assisted-meeting-room-booking-api\\package.json",
+            "_sep": 1,
+            "external": "file:///c%3A/Users/Viciy/coding/ai-assisted-meeting-room-booking-api/package.json",
+            "path": "/c:/Users/Viciy/coding/ai-assisted-meeting-room-booking-api/package.json",
+            "scheme": "file"
+          },
+          "isEdit": true
+        },
+        {
+          "kind": "textEditGroup",
+          "uri": {
+            "$mid": 1,
+            "fsPath": "c:\\Users\\Viciy\\coding\\ai-assisted-meeting-room-booking-api\\package.json",
+            "_sep": 1,
+            "external": "file:///c%3A/Users/Viciy/coding/ai-assisted-meeting-room-booking-api/package.json",
+            "path": "/c:/Users/Viciy/coding/ai-assisted-meeting-room-booking-api/package.json",
+            "scheme": "file"
+          },
+          "edits": [
+            [
+              {
+                "text": ",\r\n    \"test\": \"node scripts/test-api.js\"",
+                "range": {
+                  "startLineNumber": 8,
+                  "startColumn": 37,
+                  "endLineNumber": 8,
+                  "endColumn": 37
+                }
+              }
+            ],
+            []
+          ],
+          "done": true
+        },
+        {
+          "value": "\n```\n",
+          "supportThemeIcons": false,
+          "supportHtml": false,
+          "supportAlertSyntax": false,
+          "uris": {}
+        },
+        {
+          "value": "Now let me start the server and run the tests: ",
+          "supportThemeIcons": false,
+          "supportHtml": false,
+          "baseUri": {
+            "$mid": 1,
+            "path": "/c:/Users/Viciy/coding/ai-assisted-meeting-room-booking-api/",
+            "scheme": "file"
+          }
+        },
+        {
+          "kind": "prepareToolInvocation",
+          "toolName": "run_in_terminal"
+        },
+        {
+          "kind": "toolInvocationSerialized",
+          "invocationMessage": "Using \"Run in Terminal\"",
+          "isConfirmed": {
+            "type": 4
+          },
+          "isComplete": true,
+          "source": {
+            "type": "internal",
+            "label": "Built-In"
+          },
+          "toolSpecificData": {
+            "kind": "terminal",
+            "terminalToolSessionId": "89c46f12-1d8e-4f69-89af-3a21f3b1ad6d",
+            "terminalCommandId": "tool-602b45f8-ef2a-4bf3-b3e5-45e11e471145",
+            "commandLine": {
+              "original": "node src/app.js"
+            },
+            "language": "pwsh",
+            "terminalCommandState": {
+              "exitCode": 1,
+              "timestamp": 1769960145882,
+              "duration": 218
+            },
+            "terminalCommandUri": {
+              "$mid": 1,
+              "path": "/e2ad927779edfca1f4c4dc793c8a1712/12",
+              "scheme": "vscode-terminal",
+              "query": "command=tool-602b45f8-ef2a-4bf3-b3e5-45e11e471145"
+            },
+            "terminalCommandOutput": {
+              "text": "node:events:486\r\n      throw er; // Unhandled 'error' event\r\n      ^\r\n\r\nError: listen EADDRINUSE: address already in use :::3000\r\n\u001b[90m    at Server.setupListenHandle [as _listen2] (node:net:1940:16)\r\n    at listenInCluster (node:net:1997:12)\r\n    at Server.listen (node:net:2102:7)\r\n\u001b[0m    at app.listen \u001b[90m(C:\\Users\\Viciy\\coding\\ai-assisted-meeting-room-booking-api\\\u001b[0mnode_modules\\\u001b[4:1mexpress\u001b[0m\\lib\\application.js:635:24\u001b[90m)\r\n\u001b[0m    at Object.<anonymous> \u001b[90m(C:\\Users\\Viciy\\coding\\ai-assisted-meeting-room-booking-api\\\u001b[0msrc\\app.js:106:5\u001b[90m)\r\n    at Module._compile (node:internal/modules/cjs/loader:1803:14)\r\n    at Object..js (node:internal/modules/cjs/loader:1934:10)\r\n    at Module.load (node:internal/modules/cjs/loader:1524:32)\r\n    at Module._load (node:internal/modules/cjs/loader:1326:12)\r\n    at TracingChannel.traceSync (node:diagnostics_channel:328:14)\r\n\u001b[0mEmitted 'error' event on Server instance at:\r\n\u001b[90m    at emitErrorNT (node:net:1976:8)\r\n    at process.processTicksAndRejections (node:internal/process/task_queues:90:21) \u001b[0m{\r\n  code: \u001b[32m'EADDRINUSE'\u001b[0m,\r\n  errno: \u001b[33m-4091\u001b[0m,\r\n  syscall: \u001b[32m'listen'\u001b[0m,\r\n  address: \u001b[32m'::'\u001b[0m,\r\n  port: \u001b[33m3000\r\n\u001b[0m}\r\n\r\nNode.js v25.5.0\u001b[?1004h",
+              "lineCount": 26
+            },
+            "terminalTheme": {
+              "background": "#181818",
+              "foreground": "#cccccc"
+            }
+          },
+          "toolCallId": "7755ae07-ec75-4d2c-8750-3fc69e87840d",
+          "toolId": "run_in_terminal"
+        },
+        {
+          "value": "The server is already running. Let me run the tests: ",
+          "supportThemeIcons": false,
+          "supportHtml": false,
+          "baseUri": {
+            "$mid": 1,
+            "path": "/c:/Users/Viciy/coding/ai-assisted-meeting-room-booking-api/",
+            "scheme": "file"
+          }
+        },
+        {
+          "kind": "prepareToolInvocation",
+          "toolName": "run_in_terminal"
+        },
+        {
+          "kind": "toolInvocationSerialized",
+          "invocationMessage": "Using \"Run in Terminal\"",
+          "isConfirmed": {
+            "type": 4
+          },
+          "isComplete": true,
+          "source": {
+            "type": "internal",
+            "label": "Built-In"
+          },
+          "toolSpecificData": {
+            "kind": "terminal",
+            "terminalToolSessionId": "67cf99c2-81d9-4237-8ecc-ec0945e750c9",
+            "terminalCommandId": "tool-9faa8f9a-1955-45b2-abad-5b06cc745d81",
+            "commandLine": {
+              "original": "node scripts/test-api.js"
+            },
+            "language": "pwsh",
+            "terminalCommandState": {
+              "exitCode": 0,
+              "timestamp": 1769960158699,
+              "duration": 391
+            },
+            "terminalCommandUri": {
+              "$mid": 1,
+              "path": "/e2ad927779edfca1f4c4dc793c8a1712/12",
+              "scheme": "vscode-terminal",
+              "query": "command=tool-9faa8f9a-1955-45b2-abad-5b06cc745d81"
+            },
+            "terminalCommandOutput": {
+              "text": "PS C:\\Users\\Viciy\\coding\\ai-assisted-meeting-room-booking-api> \u001b[93mnode \u001b[37mscripts/test-api.js\r\n\r\n\u001b[0m🧪 Meeting Room Booking API Tests\r\n\r\n==================================================\r\n\r\n📋 Test: Health Check\r\n  ✅ Returns 200 status (expected: 200, got: 200)\r\n  ✅ Returns status ok (expected: ok, got: ok)\r\n\r\n📋 Test: Create Valid Booking\r\n  ✅ Returns 201 status (expected: 201, got: 201)\r\n  ✅ Returns booking ID\r\n  ✅ Returns correct roomId (expected: room-1, got: room-1)\r\n\r\n📋 Test: Create Booking - Missing Fields\r\n  ✅ Returns 400 for missing fields (expected: 400, got: 400)\r\n\r\n📋 Test: Create Booking - Past Date\r\n  ✅ Returns 400 for past booking (expected: 400, got: 400)\r\n  ✅ Error mentions past\r\n\r\n📋 Test: Create Booking - End Before Start\r\n  ✅ Returns 400 for invalid time range (expected: 400, got: 400)\r\n\r\n📋 Test: Create Booking - Overlapping\r\n  ✅ Returns 409 for overlapping booking (expected: 409, got: 409)\r\n\r\n📋 Test: List Bookings for Room\r\n  ✅ Returns 200 status (expected: 200, got: 200)\r\n  ✅ Returns an array\r\n  ✅ Has at least one booking\r\n\r\n📋 Test: List Bookings - Empty Room\r\n  ✅ Returns 200 status (expected: 200, got: 200)\r\n  ✅ Returns empty array (expected: 0, got: 0)\r\n\r\n📋 Test: Cancel Booking\r\n  ✅ Returns 200 status (expected: 200, got: 200)\r\n  ✅ Confirms cancellation\r\n\r\n📋 Test: Cancel Non-Existent Booking\r\n  ✅ Returns 404 for non-existent booking (expected: 404, got: 404)\r\n\r\n📋 Test: Cancel Invalid ID\r\n  ✅ Returns 400 for invalid ID (expected: 400, got: 400)\r\n\r\n📋 Test: Different Rooms - No Conflict\r\n  ✅ Different room booking succeeds (expected: 201, got: 201)\r\n\r\n==================================================\r\n\r\n📊 Results: 20 passed, 0 failed\r\n\u001b[?1004h",
+              "lineCount": 54
+            },
+            "terminalTheme": {
+              "background": "#181818",
+              "foreground": "#cccccc"
+            }
+          },
+          "toolCallId": "ef87c0c8-5afe-4eba-889d-514226437005",
+          "toolId": "run_in_terminal"
+        },
+        {
+          "value": "All tests pass. I've created ",
+          "supportThemeIcons": false,
+          "supportHtml": false,
+          "baseUri": {
+            "$mid": 1,
+            "path": "/c:/Users/Viciy/coding/ai-assisted-meeting-room-booking-api/",
+            "scheme": "file"
+          }
+        },
+        {
+          "kind": "inlineReference",
+          "name": "scripts/test-api.js",
+          "inlineReference": {
+            "$mid": 1,
+            "fsPath": "c:\\Users\\Viciy\\coding\\ai-assisted-meeting-room-booking-api\\scripts\\test-api.js",
+            "_sep": 1,
+            "external": "file:///c%3A/Users/Viciy/coding/ai-assisted-meeting-room-booking-api/scripts/test-api.js",
+            "path": "/c:/Users/Viciy/coding/ai-assisted-meeting-room-booking-api/scripts/test-api.js",
+            "scheme": "file"
+          }
+        },
+        {
+          "value": " - a minimal test script with no external dependencies that tests:\n\n| Test | Description |\n|------|-------------|\n| Health Check | Verifies `/health` endpoint |\n| Create Valid Booking | Creates a booking successfully |\n| Missing Fields | Rejects bookings without required fields |\n| Past Date | Rejects bookings in the past |\n| End Before Start | Rejects invalid time ranges |\n| Overlapping | Rejects conflicting bookings for same room |\n| List Bookings | Returns bookings for a room |\n| Empty Room | Returns empty array for room with no bookings |\n| Cancel Booking | Successfully cancels a booking |\n| Non-Existent Booking | Returns 404 for missing booking |\n| Invalid ID | Returns 400 for invalid booking ID |\n| Different Rooms | Allows same time slot in different rooms |\n\n**Usage:**\n```bash\n# In one terminal, start the server:\nnpm start\n\n# In another terminal, run tests:\nnpm test\n```",
+          "supportThemeIcons": false,
+          "supportHtml": false,
+          "baseUri": {
+            "$mid": 1,
+            "path": "/c:/Users/Viciy/coding/ai-assisted-meeting-room-booking-api/",
+            "scheme": "file"
+          }
+        }
+      ],
+      "agent": {
+        "extensionId": {
+          "value": "GitHub.copilot-chat",
+          "_lower": "github.copilot-chat"
+        },
+        "extensionVersion": "0.36.2",
+        "publisherDisplayName": "GitHub",
+        "extensionPublisherId": "GitHub",
+        "extensionDisplayName": "GitHub Copilot Chat",
+        "id": "github.copilot.editsAgent",
+        "description": "Edit files in your workspace in agent mode",
+        "when": "config.chat.agent.enabled",
+        "metadata": {
+          "themeIcon": {
+            "id": "tools"
+          },
+          "hasFollowups": false,
+          "supportIssueReporting": false
+        },
+        "name": "agent",
+        "fullName": "GitHub Copilot",
+        "isDefault": true,
+        "locations": [
+          "panel"
+        ],
+        "modes": [
+          "agent"
+        ],
+        "slashCommands": [],
+        "disambiguation": []
+      },
+      "timestamp": 1769960033796,
+      "editedFileEvents": [
+        {
+          "eventKind": 1,
+          "uri": {
+            "$mid": 1,
+            "fsPath": "c:\\Users\\Viciy\\coding\\ai-assisted-meeting-room-booking-api\\scripts\\parse-promptit.js",
+            "_sep": 1,
+            "external": "file:///c%3A/Users/Viciy/coding/ai-assisted-meeting-room-booking-api/scripts/parse-promptit.js",
+            "path": "/c:/Users/Viciy/coding/ai-assisted-meeting-room-booking-api/scripts/parse-promptit.js",
+            "scheme": "file"
+          }
+        }
+      ],
+      "modelId": "copilot/claude-opus-4.5",
+      "responseId": "response_70264182-db7b-4465-9820-9ae8e855a9d7",
+      "result": {
+        "timings": {
+          "firstProgress": 3479,
+          "totalElapsed": 130172
+        },
+        "metadata": {
+          "codeBlocks": [
+            {
+              "code": "# In one terminal, start the server:\nnpm start\n\n# In another terminal, run tests:\nnpm test\n",
+              "language": "bash",
+              "markdownBeforeBlock": "All tests pass. I've created  - a minimal test script with no external dependencies that tests:\n\n| Test | Description |\n|------|-------------|\n| Health Check | Verifies `/health` endpoint |\n| Create Valid Booking | Creates a booking successfully |\n| Missing Fields | Rejects bookings without required fields |\n| Past Date | Rejects bookings in the past |\n| End Before Start | Rejects invalid time ranges |\n| Overlapping | Rejects conflicting bookings for same room |\n| List Bookings | Returns bookings for a room |\n| Empty Room | Returns empty array for room with no bookings |\n| Cancel Booking | Successfully cancels a booking |\n| Non-Existent Booking | Returns 404 for missing booking |\n| Invalid ID | Returns 400 for invalid booking ID |\n| Different Rooms | Allows same time slot in different rooms |\n\n**Usage:**\n"
+            }
+          ],
+          "renderedUserMessage": [
+            {
+              "type": 1,
+              "text": "<context>\nThe current date is February 1, 2026.\nTerminals:\nTerminal: powershell\nLast Command: \nCwd: C:\\Users\\Viciy\\coding\\ai-assisted-meeting-room-booking-api\nExit Code: (unknown)\nTerminal: node\nLast Command: npm install\nCwd: C:\\Users\\Viciy\\coding\\ai-assisted-meeting-room-booking-api\nExit Code: 0\n\n</context>\n<editorContext>\nThe user's current file is c:\\Users\\Viciy\\coding\\ai-assisted-meeting-room-booking-api\\src\\app.js. \n</editorContext>\n<reminderInstructions>\nWhen using the replace_string_in_file tool, include 3-5 lines of unchanged code before and after the string you want to replace, to make it unambiguous which part of the file should be edited.\nFor maximum efficiency, whenever you plan to perform multiple independent edit operations, invoke them simultaneously using multi_replace_string_in_file tool rather than sequentially. This will greatly improve user's cost and time efficiency leading to a better user experience. Do not announce which tool you're using (for example, avoid saying \"I'll implement all the changes using multi_replace_string_in_file\").\nDo NOT create a new markdown file to document each change or summarize your work unless specifically requested by the user.\n\n</reminderInstructions>\n<userRequest>\nTo be able to easily test our API, we should create a minimal test script/app that we can use to verify any changes we make to the API. Do not use any external testing libraries.\n</userRequest>\n"
+            },
+            {
+              "type": 3,
+              "cacheType": "ephemeral"
+            }
+          ],
+          "toolCallRounds": [
+            {
+              "response": "",
+              "toolCalls": [
+                {
+                  "name": "create_file",
+                  "arguments": "{\"filePath\": \"c:\\\\Users\\\\Viciy\\\\coding\\\\ai-assisted-meeting-room-booking-api\\\\scripts\\\\test-api.js\", \"content\": \"/**\\n * Simple API test script - no external dependencies\\n * Usage: Start the server first (npm start), then run: node scripts/test-api.js\\n */\\n\\nconst http = require('http');\\n\\nconst BASE_URL = 'http://localhost:3000';\\n\\n// Helper to make HTTP requests\\nfunction request(method, path, body = null) {\\n  return new Promise((resolve, reject) => {\\n    const url = new URL(path, BASE_URL);\\n    const options = {\\n      hostname: url.hostname,\\n      port: url.port,\\n      path: url.pathname,\\n      method,\\n      headers: {\\n        'Content-Type': 'application/json',\\n      },\\n    };\\n\\n    const req = http.request(options, (res) => {\\n      let data = '';\\n      res.on('data', (chunk) => (data += chunk));\\n      res.on('end', () => {\\n        let parsed;\\n        try {\\n          parsed = JSON.parse(data);\\n        } catch {\\n          parsed = data;\\n        }\\n        resolve({ status: res.statusCode, body: parsed });\\n      });\\n    });\\n\\n    req.on('error', reject);\\n\\n    if (body) {\\n      req.write(JSON.stringify(body));\\n    }\\n    req.end();\\n  });\\n}\\n\\n// Test utilities\\nlet passed = 0;\\nlet failed = 0;\\n\\nfunction assert(condition, message) {\\n  if (condition) {\\n    console.log(`  ✅ ${message}`);\\n    passed++;\\n  } else {\\n    console.log(`  ❌ ${message}`);\\n    failed++;\\n  }\\n}\\n\\nfunction assertEq(actual, expected, message) {\\n  assert(actual === expected, `${message} (expected: ${expected}, got: ${actual})`);\\n}\\n\\n// Get a future date (hours from now)\\nfunction futureDate(hoursFromNow) {\\n  const date = new Date();\\n  date.setHours(date.getHours() + hoursFromNow);\\n  return date.toISOString();\\n}\\n\\n// Get a past date\\nfunction pastDate(hoursAgo) {\\n  const date = new Date();\\n  date.setHours(date.getHours() - hoursAgo);\\n  return date.toISOString();\\n}\\n\\n// Test cases\\nasync function runTests() {\\n  console.log('\\\\n🧪 Meeting Room Booking API Tests\\\\n');\\n  console.log('='.repeat(50));\\n\\n  // Test 1: Health check\\n  console.log('\\\\n📋 Test: Health Check');\\n  try {\\n    const res = await request('GET', '/health');\\n    assertEq(res.status, 200, 'Returns 200 status');\\n    assertEq(res.body.status, 'ok', 'Returns status ok');\\n  } catch (e) {\\n    console.log(`  ❌ Health check failed: ${e.message}`);\\n    console.log('\\\\n⚠️  Is the server running? Start it with: npm start\\\\n');\\n    process.exit(1);\\n  }\\n\\n  // Test 2: Create a valid booking\\n  console.log('\\\\n📋 Test: Create Valid Booking');\\n  const booking1 = {\\n    roomId: 'room-1',\\n    startTime: futureDate(1),\\n    endTime: futureDate(2),\\n  };\\n  const createRes = await request('POST', '/bookings', booking1);\\n  assertEq(createRes.status, 201, 'Returns 201 status');\\n  assert(createRes.body.id !== undefined, 'Returns booking ID');\\n  assertEq(createRes.body.roomId, 'room-1', 'Returns correct roomId');\\n  const bookingId = createRes.body.id;\\n\\n  // Test 3: Create booking with missing fields\\n  console.log('\\\\n📋 Test: Create Booking - Missing Fields');\\n  const missingRes = await request('POST', '/bookings', { roomId: 'room-1' });\\n  assertEq(missingRes.status, 400, 'Returns 400 for missing fields');\\n\\n  // Test 4: Create booking in the past\\n  console.log('\\\\n📋 Test: Create Booking - Past Date');\\n  const pastBooking = {\\n    roomId: 'room-2',\\n    startTime: pastDate(2),\\n    endTime: pastDate(1),\\n  };\\n  const pastRes = await request('POST', '/bookings', pastBooking);\\n  assertEq(pastRes.status, 400, 'Returns 400 for past booking');\\n  assert(pastRes.body.error.includes('past'), 'Error mentions past');\\n\\n  // Test 5: Create booking with end before start\\n  console.log('\\\\n📋 Test: Create Booking - End Before Start');\\n  const invalidBooking = {\\n    roomId: 'room-2',\\n    startTime: futureDate(3),\\n    endTime: futureDate(2),\\n  };\\n  const invalidRes = await request('POST', '/bookings', invalidBooking);\\n  assertEq(invalidRes.status, 400, 'Returns 400 for invalid time range');\\n\\n  // Test 6: Create overlapping booking\\n  console.log('\\\\n📋 Test: Create Booking - Overlapping');\\n  const overlappingBooking = {\\n    roomId: 'room-1',\\n    startTime: futureDate(1),\\n    endTime: futureDate(2),\\n  };\\n  const overlapRes = await request('POST', '/bookings', overlappingBooking);\\n  assertEq(overlapRes.status, 409, 'Returns 409 for overlapping booking');\\n\\n  // Test 7: List bookings for a room\\n  console.log('\\\\n📋 Test: List Bookings for Room');\\n  const listRes = await request('GET', '/rooms/room-1/bookings');\\n  assertEq(listRes.status, 200, 'Returns 200 status');\\n  assert(Array.isArray(listRes.body), 'Returns an array');\\n  assert(listRes.body.length >= 1, 'Has at least one booking');\\n\\n  // Test 8: List bookings for empty room\\n  console.log('\\\\n📋 Test: List Bookings - Empty Room');\\n  const emptyListRes = await request('GET', '/rooms/empty-room/bookings');\\n  assertEq(emptyListRes.status, 200, 'Returns 200 status');\\n  assertEq(emptyListRes.body.length, 0, 'Returns empty array');\\n\\n  // Test 9: Cancel booking\\n  console.log('\\\\n📋 Test: Cancel Booking');\\n  const cancelRes = await request('DELETE', `/bookings/${bookingId}`);\\n  assertEq(cancelRes.status, 200, 'Returns 200 status');\\n  assert(cancelRes.body.message.includes('cancelled'), 'Confirms cancellation');\\n\\n  // Test 10: Cancel non-existent booking\\n  console.log('\\\\n📋 Test: Cancel Non-Existent Booking');\\n  const notFoundRes = await request('DELETE', '/bookings/99999');\\n  assertEq(notFoundRes.status, 404, 'Returns 404 for non-existent booking');\\n\\n  // Test 11: Cancel with invalid ID\\n  console.log('\\\\n📋 Test: Cancel Invalid ID');\\n  const invalidIdRes = await request('DELETE', '/bookings/invalid');\\n  assertEq(invalidIdRes.status, 400, 'Returns 400 for invalid ID');\\n\\n  // Test 12: Booking in different room should not conflict\\n  console.log('\\\\n📋 Test: Different Rooms - No Conflict');\\n  const room2Booking = {\\n    roomId: 'room-2',\\n    startTime: futureDate(1),\\n    endTime: futureDate(2),\\n  };\\n  const room2Res = await request('POST', '/bookings', room2Booking);\\n  assertEq(room2Res.status, 201, 'Different room booking succeeds');\\n\\n  // Summary\\n  console.log('\\\\n' + '='.repeat(50));\\n  console.log(`\\\\n📊 Results: ${passed} passed, ${failed} failed\\\\n`);\\n\\n  if (failed > 0) {\\n    process.exit(1);\\n  }\\n}\\n\\nrunTests().catch((err) => {\\n  console.error('Test error:', err);\\n  process.exit(1);\\n});\\n\"}",
+                  "id": "toolu_01GFyhh6RQ5UFSubExuscs1n__vscode-1769951198136"
+                }
+              ],
+              "toolInputRetry": 0,
+              "id": "ecb13fc0-9229-4de7-862d-a7072cddd095",
+              "thinking": {
+                "id": "BXyRl5xGqYeMGnn/Gi5g9WwCcdRHmngZcJ5EZEDEuO/yE7as1PdZKjkqd0U512PBbf1DQVACbFWdlmKST/v934eYZvgONtEaCaoO/W8o7grOpKdb2ZuNEAs+KFUg/CzpyOUlSOD7SN2p6/DhPr7mPADRAvdFmaHK6jCGkCP+/TpfNZG1BCqeQUQoFemaDJJXJyLcCLc3vzBbyfIooxvsPsRxH4/np0WOYuQfmqJFCUZMEv6x+awtCCN91KTNDZAAbujjemgRnqFSGdDYBzr/e50AM39IhrZbP0eWqiwnZxwZKfXDrrL7rH+5eVOvpRVAq9C+UaAbzoOoIPeL0iUe/m1wOrcUhCxq09yWkNVGs3Rb1lGKCZwcxGPtnEI65NMjfWQiT6PcY0O1ZZSkItnHwyGysVNYXy8nernJ9q5rWJA9ZD+fPEpia/UuhiG1OpPI9Ss6wkRQdEr4sjfiIAF0cw/rpXX+s4XG3KomlFkPkrj0tq/k5vOw1G/UiQgqdO61pVXrjf5/GkToQx2Szck5gwJFuO+uy1MlYRkxh2KtQgL3tsTr0450D8DYthRnohgk2GTXLqc1LHhQBJ8XdidNy2Eb+kcwpsd0wifG1IxeC4kIcO8+HY8Q9VZlFJ1P/19agUaHWIlpE7ObTxvqZY7z8B2QsgJK13N6mHbBJnb8y6Tv1Se1bqNxjoCGTUPp1dPZWx9NLh4k/JVoCesQpGrRNvbhdd64Pi6FB7apMtdcuN8bCOE4nVK15JmNkFq3XwRIfLQEoAvh2wWIWQ8GI/4JChPAIiHj1Wn1/XWFR5MkGlqTN7tQ2rnmcRWdIZi6KytY+2trITAvzam6sIwmcST+g3cZvB+RJ+cRCWR1zNnwnOF3CJY8vmn3PzENyEdmh6neT9CSrYNJ9Axzzu58BegP0aawDbGDxQkxP+Ica/5s03vYsP2siaDEj53oh5FCOu8icQFD/cEgXMOqjFXbWdBnzHnAC3USvN6QNMbW1sscQyBvt/Zt5Z6moOg1KL41a6ZOde4C5K+CO6o/UNZLKRe8dxV1JlBPuWiK7Gp40w==",
+                "text": "The user wants a simple test script to verify the API without using external testing libraries. I'll create a Node.js script that uses the built-in `http` module to make requests to the API and verify the responses.",
+                "encrypted": "BXyRl5xGqYeMGnn/Gi5g9WwCcdRHmngZcJ5EZEDEuO/yE7as1PdZKjkqd0U512PBbf1DQVACbFWdlmKST/v934eYZvgONtEaCaoO/W8o7grOpKdb2ZuNEAs+KFUg/CzpyOUlSOD7SN2p6/DhPr7mPADRAvdFmaHK6jCGkCP+/TpfNZG1BCqeQUQoFemaDJJXJyLcCLc3vzBbyfIooxvsPsRxH4/np0WOYuQfmqJFCUZMEv6x+awtCCN91KTNDZAAbujjemgRnqFSGdDYBzr/e50AM39IhrZbP0eWqiwnZxwZKfXDrrL7rH+5eVOvpRVAq9C+UaAbzoOoIPeL0iUe/m1wOrcUhCxq09yWkNVGs3Rb1lGKCZwcxGPtnEI65NMjfWQiT6PcY0O1ZZSkItnHwyGysVNYXy8nernJ9q5rWJA9ZD+fPEpia/UuhiG1OpPI9Ss6wkRQdEr4sjfiIAF0cw/rpXX+s4XG3KomlFkPkrj0tq/k5vOw1G/UiQgqdO61pVXrjf5/GkToQx2Szck5gwJFuO+uy1MlYRkxh2KtQgL3tsTr0450D8DYthRnohgk2GTXLqc1LHhQBJ8XdidNy2Eb+kcwpsd0wifG1IxeC4kIcO8+HY8Q9VZlFJ1P/19agUaHWIlpE7ObTxvqZY7z8B2QsgJK13N6mHbBJnb8y6Tv1Se1bqNxjoCGTUPp1dPZWx9NLh4k/JVoCesQpGrRNvbhdd64Pi6FB7apMtdcuN8bCOE4nVK15JmNkFq3XwRIfLQEoAvh2wWIWQ8GI/4JChPAIiHj1Wn1/XWFR5MkGlqTN7tQ2rnmcRWdIZi6KytY+2trITAvzam6sIwmcST+g3cZvB+RJ+cRCWR1zNnwnOF3CJY8vmn3PzENyEdmh6neT9CSrYNJ9Axzzu58BegP0aawDbGDxQkxP+Ica/5s03vYsP2siaDEj53oh5FCOu8icQFD/cEgXMOqjFXbWdBnzHnAC3USvN6QNMbW1sscQyBvt/Zt5Z6moOg1KL41a6ZOde4C5K+CO6o/UNZLKRe8dxV1JlBPuWiK7Gp40w=="
+              }
+            },
+            {
+              "response": "",
+              "toolCalls": [
+                {
+                  "name": "replace_string_in_file",
+                  "arguments": "{\"filePath\": \"c:\\\\Users\\\\Viciy\\\\coding\\\\ai-assisted-meeting-room-booking-api\\\\package.json\", \"oldString\": \"{\\n  \\\"name\\\": \\\"meeting-room-booking-api\\\",\\n  \\\"version\\\": \\\"1.0.0\\\",\\n  \\\"description\\\": \\\"Simple REST API for booking meeting rooms\\\",\\n  \\\"main\\\": \\\"src/app.js\\\",\\n  \\\"scripts\\\": {\\n    \\\"start\\\": \\\"node src/app.js\\\",\\n    \\\"dev\\\": \\\"node --watch src/app.js\\\"\\n  },\", \"newString\": \"{\\n  \\\"name\\\": \\\"meeting-room-booking-api\\\",\\n  \\\"version\\\": \\\"1.0.0\\\",\\n  \\\"description\\\": \\\"Simple REST API for booking meeting rooms\\\",\\n  \\\"main\\\": \\\"src/app.js\\\",\\n  \\\"scripts\\\": {\\n    \\\"start\\\": \\\"node src/app.js\\\",\\n    \\\"dev\\\": \\\"node --watch src/app.js\\\",\\n    \\\"test\\\": \\\"node scripts/test-api.js\\\"\\n  },\"}",
+                  "id": "toolu_015gPi3TrHmPWwxtS46QZF5f__vscode-1769951198137"
+                }
+              ],
+              "toolInputRetry": 0,
+              "id": "3ee3bbe5-952e-4217-b9ba-c81956cb0526"
+            },
+            {
+              "response": "Now let me start the server and run the tests: ",
+              "toolCalls": [
+                {
+                  "name": "run_in_terminal",
+                  "arguments": "{\"command\": \"node src/app.js\", \"explanation\": \"Start the API server in the background\", \"isBackground\": true}",
+                  "id": "toolu_01DiHagN6Wmqz8KRrPR6igxp__vscode-1769951198138"
+                }
+              ],
+              "toolInputRetry": 0,
+              "id": "4e3b3df3-98c1-4825-b27c-59654b579db3"
+            },
+            {
+              "response": "The server is already running. Let me run the tests: ",
+              "toolCalls": [
+                {
+                  "name": "run_in_terminal",
+                  "arguments": "{\"command\": \"node scripts/test-api.js\", \"explanation\": \"Run the API tests\", \"isBackground\": false}",
+                  "id": "toolu_01BQpd6bTR6dS9YVZCyeNZCm__vscode-1769951198139"
+                }
+              ],
+              "toolInputRetry": 0,
+              "id": "a2bc2bf8-b151-4970-9ccd-d0d239e7ca17"
+            },
+            {
+              "response": "All tests pass. I've created [scripts/test-api.js](scripts/test-api.js) - a minimal test script with no external dependencies that tests:\n\n| Test | Description |\n|------|-------------|\n| Health Check | Verifies `/health` endpoint |\n| Create Valid Booking | Creates a booking successfully |\n| Missing Fields | Rejects bookings without required fields |\n| Past Date | Rejects bookings in the past |\n| End Before Start | Rejects invalid time ranges |\n| Overlapping | Rejects conflicting bookings for same room |\n| List Bookings | Returns bookings for a room |\n| Empty Room | Returns empty array for room with no bookings |\n| Cancel Booking | Successfully cancels a booking |\n| Non-Existent Booking | Returns 404 for missing booking |\n| Invalid ID | Returns 400 for invalid booking ID |\n| Different Rooms | Allows same time slot in different rooms |\n\n**Usage:**\n```bash\n# In one terminal, start the server:\nnpm start\n\n# In another terminal, run tests:\nnpm test\n```",
+              "toolCalls": [],
+              "toolInputRetry": 0,
+              "id": "6ed9f5c2-6a82-40a3-ac43-c4e8dcbe8adc"
+            }
+          ],
+          "toolCallResults": {
+            "toolu_01GFyhh6RQ5UFSubExuscs1n__vscode-1769951198136": {
+              "$mid": 20,
+              "content": [
+                {
+                  "$mid": 23,
+                  "value": {
+                    "node": {
+                      "type": 1,
+                      "ctor": 2,
+                      "ctorName": "$_",
+                      "children": [
+                        {
+                          "type": 2,
+                          "priority": 9007199254740991,
+                          "text": "The following files were successfully edited:",
+                          "lineBreakBefore": false
+                        },
+                        {
+                          "type": 2,
+                          "priority": 9007199254740991,
+                          "text": "\n",
+                          "lineBreakBefore": false
+                        },
+                        {
+                          "type": 2,
+                          "priority": 9007199254740991,
+                          "text": "c:\\Users\\Viciy\\coding\\ai-assisted-meeting-room-booking-api\\scripts\\test-api.js",
+                          "lineBreakBefore": false
+                        },
+                        {
+                          "type": 2,
+                          "priority": 9007199254740991,
+                          "text": "\n",
+                          "lineBreakBefore": false
+                        }
+                      ],
+                      "props": {},
+                      "references": []
+                    }
+                  }
+                }
+              ]
+            },
+            "toolu_015gPi3TrHmPWwxtS46QZF5f__vscode-1769951198137": {
+              "$mid": 20,
+              "content": [
+                {
+                  "$mid": 23,
+                  "value": {
+                    "node": {
+                      "type": 1,
+                      "ctor": 2,
+                      "ctorName": "$_",
+                      "children": [
+                        {
+                          "type": 2,
+                          "priority": 9007199254740991,
+                          "text": "The following files were successfully edited:",
+                          "lineBreakBefore": false
+                        },
+                        {
+                          "type": 2,
+                          "priority": 9007199254740991,
+                          "text": "\n",
+                          "lineBreakBefore": false
+                        },
+                        {
+                          "type": 2,
+                          "priority": 9007199254740991,
+                          "text": "c:\\Users\\Viciy\\coding\\ai-assisted-meeting-room-booking-api\\package.json",
+                          "lineBreakBefore": false
+                        },
+                        {
+                          "type": 2,
+                          "priority": 9007199254740991,
+                          "text": "\n",
+                          "lineBreakBefore": false
+                        }
+                      ],
+                      "props": {},
+                      "references": []
+                    }
+                  }
+                }
+              ]
+            },
+            "toolu_01DiHagN6Wmqz8KRrPR6igxp__vscode-1769951198138": {
+              "$mid": 20,
+              "content": [
+                {
+                  "$mid": 21,
+                  "value": "Command is running in terminal with ID=e76571a7-0897-4ad8-b93e-b02265b7aec4\n The command became idle with output:\nThe terminal output indicates an error. The specific error is:\n\n```\nError: listen EADDRINUSE: address already in use :::3000\n```\n\nThis means that the application is trying to listen on port 3000, but that port is already in use by another process."
+                }
+              ]
+            },
+            "toolu_01BQpd6bTR6dS9YVZCyeNZCm__vscode-1769951198139": {
+              "$mid": 20,
+              "content": [
+                {
+                  "$mid": 21,
+                  "value": "PS C:\\Users\\Viciy\\coding\\ai-assisted-meeting-room-booking-api> node scripts/test-api.js\n\n🧪 Meeting Room Booking API Tests\n\n==================================================\n\n📋 Test: Health Check\n  ✅ Returns 200 status (expected: 200, got: 200)\n  ✅ Returns status ok (expected: ok, got: ok)\n\n📋 Test: Create Valid Booking\n  ✅ Returns 201 status (expected: 201, got: 201)\n  ✅ Returns booking ID\n  ✅ Returns correct roomId (expected: room-1, got: room-1)\n\n📋 Test: Create Booking - Missing Fields\n  ✅ Returns 400 for missing fields (expected: 400, got: 400)\n\n📋 Test: Create Booking - Past Date\n  ✅ Returns 400 for past booking (expected: 400, got: 400)\n  ✅ Error mentions past\n\n📋 Test: Create Booking - End Before Start\n  ✅ Returns 400 for invalid time range (expected: 400, got: 400)\n\n📋 Test: Create Booking - Overlapping\n  ✅ Returns 409 for overlapping booking (expected: 409, got: 409)\n\n📋 Test: List Bookings for Room\n  ✅ Returns 200 status (expected: 200, got: 200)\n  ✅ Returns an array\n  ✅ Has at least one booking\n\n📋 Test: List Bookings - Empty Room\n  ✅ Returns 200 status (expected: 200, got: 200)\n  ✅ Returns empty array (expected: 0, got: 0)\n\n📋 Test: Cancel Booking\n  ✅ Returns 200 status (expected: 200, got: 200)\n  ✅ Confirms cancellation\n\n📋 Test: Cancel Non-Existent Booking\n  ✅ Returns 404 for non-existent booking (expected: 404, got: 404)\n\n📋 Test: Cancel Invalid ID\n  ✅ Returns 400 for invalid ID (expected: 400, got: 400)\n\n📋 Test: Different Rooms - No Conflict\n  ✅ Different room booking succeeds (expected: 201, got: 201)\n\n==================================================\n\n📊 Results: 20 passed, 0 failed\n\n"
+                }
+              ]
+            }
+          },
+          "modelMessageId": "ed3d55ce-113f-424c-96bb-ddf2d85fa3d0",
+          "responseId": "4edfc491-2c75-4f4a-a5b0-22c178aaddff",
+          "sessionId": "238d215e-8e7d-4df3-b33c-42a98145e91b",
+          "agentId": "github.copilot.editsAgent"
+        },
+        "details": "Claude Opus 4.5 • 3x"
+      },
+      "responseMarkdownInfo": [],
+      "followups": [],
+      "modelState": {
+        "value": 1,
+        "completedAt": 1769960164008
+      },
+      "contentReferences": [],
+      "codeCitations": [],
+      "timeSpentWaiting": 81863
     }
   ]
 }
