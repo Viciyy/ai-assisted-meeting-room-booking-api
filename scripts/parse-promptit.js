@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 
 /**
- * Parses PROMPTIT.json and creates a human-readable markdown file
+ * Parses PROMPTIT.json and creates a comprehensive human-readable markdown file
  */
 
 const inputPath = path.join(__dirname, '..', 'PROMPTIT.json');
@@ -12,6 +12,56 @@ const outputPath = path.join(__dirname, '..', 'PROMPTIT.md');
 const data = JSON.parse(fs.readFileSync(inputPath, 'utf-8'));
 
 let markdown = '';
+
+// Helper: escape code fences in content
+function getCodeFence(content) {
+  let backticks = '```';
+  while (content.includes(backticks)) {
+    backticks += '`';
+  }
+  return backticks;
+}
+
+// Helper: get language for file extension
+function getLangForExt(filePath) {
+  const ext = path.extname(filePath).slice(1) || 'text';
+  const langMap = {
+    'js': 'javascript',
+    'ts': 'typescript',
+    'json': 'json',
+    'md': 'markdown',
+    'py': 'python',
+    'html': 'html',
+    'css': 'css',
+    'sh': 'bash',
+    'bash': 'bash',
+    'ps1': 'powershell',
+    'pwsh': 'powershell'
+  };
+  return langMap[ext] || ext;
+}
+
+// Helper: clean terminal ANSI codes
+function cleanAnsi(text) {
+  return text.replace(/\x1b\[[0-9;]*[a-zA-Z]/g, '').replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+}
+
+// Helper: extract file path from URI or message
+function extractFilePath(item) {
+  if (item.uri && item.uri.path) {
+    return item.uri.path.replace(/^\//, '').replace(/\//g, '\\');
+  }
+  if (item.pastTenseMessage) {
+    const msg = typeof item.pastTenseMessage === 'string' ? item.pastTenseMessage : item.pastTenseMessage.value;
+    if (msg) {
+      const match = msg.match(/file:\/\/\/([^)"\s#]+)/);
+      if (match) {
+        return decodeURIComponent(match[1]).replace(/\//g, '\\');
+      }
+    }
+  }
+  return null;
+}
 
 // Header
 markdown += '# Chat History\n\n';
@@ -34,93 +84,111 @@ if (data.requests && Array.isArray(data.requests)) {
     if (request.response && Array.isArray(request.response)) {
       markdown += '### 🤖 Assistant\n\n';
 
-      const thinkingBlocks = [];
-      const toolInvocations = [];
-      const textEdits = [];
-      const markdownContent = [];
+      // Collect all content in order
+      const sections = {
+        thinking: [],
+        actions: [],
+        fileEdits: [],
+        terminalOutputs: [],
+        responseText: []
+      };
 
       request.response.forEach(item => {
-        switch (item.kind) {
-          case 'thinking':
-            if (item.value && item.value.trim()) {
-              thinkingBlocks.push(item.value.trim());
+        // Thinking blocks
+        if (item.kind === 'thinking' && item.value && item.value.trim()) {
+          sections.thinking.push(item.value.trim());
+        }
+        
+        // Tool invocations (file operations, terminal commands)
+        else if (item.kind === 'toolInvocationSerialized') {
+          const toolId = item.toolId || '';
+          const filePath = extractFilePath(item);
+          
+          // File operations
+          if (filePath && (toolId.includes('createFile') || toolId.includes('editFile') || toolId.includes('replace'))) {
+            const pastMsg = typeof item.pastTenseMessage === 'string' ? item.pastTenseMessage : item.pastTenseMessage?.value || '';
+            const action = pastMsg.includes('Created') ? 'Created' : 
+                          pastMsg.includes('Edited') ? 'Edited' : 
+                          pastMsg.includes('Read') ? 'Read' : 'Modified';
+            if (action !== 'Read') {
+              sections.actions.push({ action, filePath, toolId });
             }
-            break;
-
-          case 'toolInvocationSerialized':
-            if (item.pastTenseMessage && item.pastTenseMessage.value) {
-              // Extract file path from the message
-              const match = item.pastTenseMessage.value.match(/file:\/\/\/([^)"\s]+)/);
-              if (match) {
-                const filePath = decodeURIComponent(match[1]).replace(/\//g, '\\');
-                const action = item.pastTenseMessage.value.includes('Created') ? 'Created' : 
-                              item.pastTenseMessage.value.includes('Edited') ? 'Edited' : 'Modified';
-                toolInvocations.push({ action, filePath, toolId: item.toolId });
-              }
+          }
+          
+          // Terminal commands
+          if (item.toolSpecificData && item.toolSpecificData.kind === 'terminal') {
+            const termData = item.toolSpecificData;
+            const cmd = termData.commandLine?.original || '';
+            const output = termData.terminalCommandOutput?.text || '';
+            const exitCode = termData.terminalCommandState?.exitCode;
+            
+            if (cmd) {
+              sections.terminalOutputs.push({
+                command: cmd,
+                output: cleanAnsi(output),
+                exitCode
+              });
             }
-            break;
-
-          case 'textEditGroup':
-            if (item.uri && item.uri.path) {
-              const filePath = item.uri.path.replace(/^\//, '').replace(/\//g, '\\');
-              // Collect all text edits for this file
-              if (item.edits && Array.isArray(item.edits)) {
-                const content = item.edits
-                  .flat()
-                  .filter(edit => edit && edit.text)
-                  .map(edit => edit.text)
-                  .join('');
-                if (content.trim()) {
-                  textEdits.push({ filePath, content: content.trim() });
-                }
-              }
+          }
+        }
+        
+        // Text edits (file contents)
+        else if (item.kind === 'textEditGroup' && item.uri && item.uri.path) {
+          const filePath = item.uri.path.replace(/^\//, '').replace(/\//g, '\\');
+          if (item.edits && Array.isArray(item.edits)) {
+            const content = item.edits
+              .flat()
+              .filter(edit => edit && edit.text)
+              .map(edit => edit.text)
+              .join('');
+            if (content.trim()) {
+              sections.fileEdits.push({ filePath, content: content.trim() });
             }
-            break;
-
-          case 'markdownContent':
-            if (item.content && item.content.value) {
-              markdownContent.push(item.content.value);
-            }
-            break;
+          }
+        }
+        
+        // Inline references (file links in response)
+        else if (item.kind === 'inlineReference') {
+          const name = item.name || (item.inlineReference?.path?.split('/').pop()) || '';
+          if (name) {
+            sections.responseText.push(`[${name}]`);
+          }
+        }
+        
+        // Plain text/value responses (markdown content from assistant)
+        else if (item.value && typeof item.value === 'string') {
+          sections.responseText.push(item.value);
+        }
+        
+        // Markdown content blocks
+        else if (item.kind === 'markdownContent' && item.content && item.content.value) {
+          sections.responseText.push(item.content.value);
         }
       });
 
-      // Display thinking process
-      if (thinkingBlocks.length > 0) {
+      // Render thinking
+      if (sections.thinking.length > 0) {
         markdown += '#### 💭 Thinking\n\n';
-        thinkingBlocks.forEach(thought => {
+        sections.thinking.forEach(thought => {
           markdown += `> ${thought.replace(/\n/g, '\n> ')}\n\n`;
         });
       }
 
-      // Display tool invocations / file operations
-      if (toolInvocations.length > 0) {
-        markdown += '#### 🔧 Actions\n\n';
-        toolInvocations.forEach(inv => {
+      // Render actions (file operations)
+      if (sections.actions.length > 0) {
+        markdown += '#### 🔧 File Operations\n\n';
+        sections.actions.forEach(inv => {
           markdown += `- **${inv.action}**: \`${inv.filePath}\`\n`;
         });
         markdown += '\n';
       }
 
-      // Display file contents created/edited
-      if (textEdits.length > 0) {
+      // Render file contents
+      if (sections.fileEdits.length > 0) {
         markdown += '#### 📄 Files Created/Modified\n\n';
-        textEdits.forEach(edit => {
-          const ext = path.extname(edit.filePath).slice(1) || 'text';
-          const langMap = {
-            'js': 'javascript',
-            'ts': 'typescript',
-            'json': 'json',
-            'md': 'markdown',
-            'py': 'python',
-            'html': 'html',
-            'css': 'css'
-          };
-          const lang = langMap[ext] || ext;
-          
-          // Use more backticks if content contains triple backticks
-          const hasTripleBackticks = edit.content.includes('```');
-          const fence = hasTripleBackticks ? '````' : '```';
+        sections.fileEdits.forEach(edit => {
+          const lang = getLangForExt(edit.filePath);
+          const fence = getCodeFence(edit.content);
           
           markdown += `**${edit.filePath}**\n\n`;
           markdown += fence + lang + '\n';
@@ -129,12 +197,35 @@ if (data.requests && Array.isArray(data.requests)) {
         });
       }
 
-      // Display markdown responses
-      if (markdownContent.length > 0) {
-        markdown += '#### 📝 Response\n\n';
-        markdownContent.forEach(content => {
-          markdown += content + '\n\n';
+      // Render terminal outputs
+      if (sections.terminalOutputs.length > 0) {
+        markdown += '#### 💻 Terminal Commands\n\n';
+        sections.terminalOutputs.forEach(term => {
+          markdown += `**Command:** \`${term.command}\`\n`;
+          if (term.exitCode !== undefined) {
+            markdown += `**Exit Code:** ${term.exitCode}\n`;
+          }
+          if (term.output.trim()) {
+            const fence = getCodeFence(term.output);
+            markdown += '\n' + fence + '\n';
+            markdown += term.output.trim() + '\n';
+            markdown += fence + '\n';
+          }
+          markdown += '\n';
         });
+      }
+
+      // Render response text
+      const fullResponse = sections.responseText.join('').trim();
+      if (fullResponse) {
+        markdown += '#### 📝 Response\n\n';
+        // Clean up potential broken code blocks from inline backtick sequences
+        // Remove standalone lines that are just backticks (empty code blocks)
+        const cleanedResponse = fullResponse
+          .replace(/```\s*\n\s*```/g, '') // Remove empty code blocks
+          .replace(/\n```\s*$/gm, '') // Remove trailing orphan code fences
+          .replace(/^```\s*\n/gm, ''); // Remove leading orphan code fences
+        markdown += cleanedResponse + '\n\n';
       }
     }
 
