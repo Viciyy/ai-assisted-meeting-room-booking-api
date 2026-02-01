@@ -63,9 +63,50 @@ function extractFilePath(item) {
   return null;
 }
 
+// Helper: create slug for anchor link
+function slugify(text) {
+  return text
+    .toLowerCase()
+    .replace(/[^\w\s-]/g, '')
+    .replace(/\s+/g, '-')
+    .trim();
+}
+
+// Helper: extract summary from user message (first line or first N chars)
+function getSummary(text, maxLen = 60) {
+  if (!text) return '';
+  const firstLine = text.split('\n')[0].trim();
+  if (firstLine.length <= maxLen) return firstLine;
+  return firstLine.substring(0, maxLen - 3) + '...';
+}
+
 // Header
 markdown += '# Chat History\n\n';
 markdown += `**Assistant:** ${data.responderUsername || 'Unknown'}\n\n`;
+
+// Collect TOC entries first
+const tocEntries = [];
+if (data.requests && Array.isArray(data.requests)) {
+  data.requests.forEach((request, index) => {
+    const userText = request.message?.text || '';
+    const summary = getSummary(userText);
+    tocEntries.push({
+      index: index + 1,
+      summary: summary || `Exchange ${index + 1}`
+    });
+  });
+}
+
+// Write Table of Contents
+if (tocEntries.length > 0) {
+  markdown += '## Table of Contents\n\n';
+  tocEntries.forEach(entry => {
+    const anchor = slugify(`exchange-${entry.index}`);
+    markdown += `- [Exchange ${entry.index}](#${anchor}): ${entry.summary}\n`;
+  });
+  markdown += '\n';
+}
+
 markdown += '---\n\n';
 
 // Process each request in the conversation

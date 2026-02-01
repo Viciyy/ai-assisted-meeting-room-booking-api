@@ -2,6 +2,23 @@
 
 **Assistant:** GitHub Copilot
 
+## Table of Contents
+
+- [Exchange 1](#exchange-1): Create a simple REST API for booking meeting rooms using ...
+- [Exchange 2](#exchange-2): Create a script that parses PROMPTIT.json and makes a hum...
+- [Exchange 3](#exchange-3): There is an extra "```" in the end of the first exchange,...
+- [Exchange 4](#exchange-4): To be able to easily test our API, we should create a min...
+- [Exchange 5](#exchange-5): One of our tests now fail if we run the tests multiple ti...
+- [Exchange 6](#exchange-6): I think there is a problem with the parse-promptit.js: it...
+- [Exchange 7](#exchange-7): There are empty codeblocks in the resulting markdown. Fin...
+- [Exchange 8](#exchange-8): I think we should extract all the business rules from the...
+- [Exchange 9](#exchange-9): Refactor the app.js so that the logic is in multiple file...
+- [Exchange 10](#exchange-10): Test 13 is failing because roomId validation passes wrong...
+- [Exchange 11](#exchange-11): Create new tests that don't only have happy paths. Check ...
+- [Exchange 12](#exchange-12): Should we also check boolean value cases?
+- [Exchange 13](#exchange-13): I don't think that the business logic should know/concern...
+- [Exchange 14](#exchange-14): We want a table of contents in the beginning of PROMPTIT....
+
 ---
 
 ## Exchange 1
@@ -3725,6 +3742,87 @@ Now let's run the tests to make sure everything still works: All 45 tests pass. 
    - Uses , ,  for responses
 
 This makes the validators reusable outside of HTTP contexts (CLI tools, tests, etc.).
+
+---
+
+## Exchange 14
+
+### 👤 User
+
+We want a table of contents in the beginning of PROMPTIT.md. Could you modify parse-promptit.js to achieve that?
+
+### 🤖 Assistant
+
+#### 💭 Thinking
+
+> The user wants me to modify the parse-promptit.js script to generate a table of contents at the beginning of the PROMPTIT.md file. Let me first read the current parse-promptit.js to understand its structure.
+
+#### 📄 Files Created/Modified
+
+**c:\Users\Viciy\coding\ai-assisted-meeting-room-booking-api\scripts\parse-promptit.js**
+
+```javascript
+lper: create slug for anchor link
+function slugify(text) {
+  return text
+    .toLowerCase()
+    .replace(/[^\w\s-]/g, '')
+    .replace(/\s+/g, '-')
+    .trim();
+}
+
+// Helper: extract summary from user message (first line or first N chars)
+function getSummary(text, maxLen = 60) {
+  if (!text) return '';
+  const firstLine = text.split('\n')[0].trim();
+  if (firstLine.length <= maxLen) return firstLine;
+  return firstLine.substring(0, maxLen - 3) + '...';
+}
+
+// Header
+markdown += '# Chat History\n\n';
+markdown += `**Assistant:** ${data.responderUsername || 'Unknown'}\n\n`;
+
+// Collect TOC entries first
+const tocEntries = [];
+if (data.requests && Array.isArray(data.requests)) {
+  data.requests.forEach((request, index) => {
+    const userText = request.message?.text || '';
+    const summary = getSummary(userText);
+    tocEntries.push({
+      index: index + 1,
+      summary: summary || `Exchange ${index + 1}`
+    });
+  });
+}
+
+// Write Table of Contents
+if (tocEntries.length > 0) {
+  markdown += '## Table of Contents\n\n';
+  tocEntries.forEach(entry => {
+    const anchor = slugify(`exchange-${entry.index}`);
+    markdown += `- [Exchange ${entry.index}](#${anchor}): ${entry.summary}\n`;
+  });
+  markdown += '\n';
+}
+```
+
+#### 💻 Terminal Commands
+
+**Command:** `cd c:\Users\Viciy\coding\ai-assisted-meeting-room-booking-api; node scripts/parse-promptit.js`
+**Exit Code:** 0
+
+```
+PS C:\Users\Viciy\coding\ai-assisted-meeting-room-booking-api> node scripts/parse-promptit.js
+✅ Successfully created C:\Users\Viciy\coding\ai-assisted-meeting-room-booking-api\PROMPTIT.md
+   Processed 13 exchanges[?1004h
+```
+
+#### 📝 Response
+
+I can see the script generates exchanges with headers like `## Exchange 1`. I'll modify it to collect TOC entries during processing and insert a table of contents at the beginning. 
+
+Now let's run the script to regenerate [PROMPTIT.md] with the table of contents: The table of contents is now generated at the beginning of PROMPTIT.md. Each entry shows the exchange number with a clickable anchor link and a summary of the user's message (first 60 characters).
 
 ---
 
