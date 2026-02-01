@@ -241,6 +241,16 @@ async function runTests() {
   const room2Res = await request('POST', '/bookings', room2Booking);
   assertEq(room2Res.status, 201, 'Different room booking succeeds');
 
+  // Test 13: invalid room id in POST /bookings
+  console.log('\n📋 Test: Create Booking - Invalid Room ID');
+  const invalidRoomBooking = {
+    roomId: ' ',
+    startTime: futureDate(5),
+    endTime: futureDate(6),
+  };
+  const invalidRoomRes = await request('POST', '/bookings', invalidRoomBooking);
+  assertEq(invalidRoomRes.status, 400, 'Returns 400 for invalid room ID');
+
   // Summary
   console.log('\n' + '='.repeat(50));
   console.log(`\n📊 Results: ${passed} passed, ${failed} failed\n`);
