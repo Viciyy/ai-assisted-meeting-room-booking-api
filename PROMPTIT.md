@@ -1758,3 +1758,222 @@ The fix cleans up these patterns by:
 
 ---
 
+## Exchange 8
+
+### 👤 User
+
+I think we should extract all the business rules from the actual endpoints to separate methods to make the endpoint code more readable.
+
+### 🤖 Assistant
+
+#### 💭 Thinking
+
+> The user wants to refactor the app.js to extract business rule validations into separate methods. Looking at the code, I can identify these business rules in the POST /bookings endpoint:
+> 
+> 1. Validate required fields (roomId, startTime, endTime)
+> 2. Validate date formats
+> 3. Start time must be before end time
+> 4. Bookings cannot be in the past
+> 5. Bookings must not overlap for the same room
+> 
+> I should extract these into separate validator functions to make the endpoint code cleaner and more readable.
+
+#### 📄 Files Created/Modified
+
+**c:\Users\Viciy\coding\ai-assisted-meeting-room-booking-api\src\app.js**
+
+```javascript
+============================================
+// Business Rule Validators
+// ============================================
+
+// Validate that all required fields are present
+function validateRequiredFields(roomId, startTime, endTime) {
+  if (!roomId || !startTime || !endTime) {
+    return { valid: false, error: 'roomId, startTime, and endTime are required', status: 400 };
+  }
+  return { valid: true };
+}
+
+// Validate that dates are in valid format
+function validateDateFormat(startTime, endTime) {
+  const start = new Date(startTime);
+  const end = new Date(endTime);
+  
+  if (isNaN(start.getTime()) || isNaN(end.getTime())) {
+    return { valid: false, error: 'Invalid date format', status: 400 };
+  }
+  return { valid: true, start, end };
+}
+
+// Validate that start time is before end time
+function validateTimeOrder(start, end) {
+  if (start >= end) {
+    return { valid: false, error: 'Start time must be before end time', status: 400 };
+  }
+  return { valid: true };
+}
+
+// Validate that booking is not in the past
+function validateNotInPast(start) {
+  if (start < new Date()) {
+    return { valid: false, error: 'Bookings cannot be in the past', status: 400 };
+  }
+  return { valid: true };
+}
+
+// Validate that booking does not overlap with existing bookings
+function validateNoOverlap(roomId, startTime, endTime) {
+  const overlapping = findOverlappingBooking(roomId, startTime, endTime);
+  if (overlapping) {
+    return { 
+      valid: false, 
+      error: 'Booking overlaps with an existing booking', 
+      status: 409,
+      conflictingBooking: overlapping 
+    };
+  }
+  return { valid: true };
+}
+
+// Run all booking validations
+function validateBooking(roomId, startTime, endTime) {
+  // Check required fields
+  const requiredCheck = validateRequiredFields(roomId, startTime, endTime);
+  if (!requiredCheck.valid) return requiredCheck;
+
+  // Check date format
+  const dateCheck = validateDateFormat(startTime, endTime);
+  if (!dateCheck.valid) return dateCheck;
+
+  const { start, end } = dateCheck;
+
+  // Check time order
+  const orderCheck = validateTimeOrder(start, end);
+  if (!orderCheck.valid) return orderCheck;
+
+  // Check not in past
+  const pastCheck = validateNotInPast(start);
+  if (!pastCheck.valid) return pastCheck;
+
+  // Check no overlap
+  const overlapCheck = validateNoOverlap(roomId, startTime, endTime);
+  if (!overlapCheck.valid) return overlapCheck;
+
+  return { valid: true, start, end };
+}
+
+// ============================================
+// Endpoints
+// ============================================
+
+// Create a booking
+app.post('/bookings', (req, res) => {
+  const { roomId, startTime, endTime } = req.body;
+
+  // Validate booking
+  const validation = validateBooking(roomId, startTime, endTime);
+  if (!validation.valid) {
+    const response = { error: validation.error };
+    if (validation.conflictingBooking) {
+      response.conflictingBooking = validation.conflictingBooking;
+    }
+    return res.status(validation.status).json(response);
+  }
+
+  // Create the booking
+  const booking = {
+    id: nextBookingId++,
+    roomId,
+    startTime: validation.start.toISOString(),
+    endTime: validation.end.toISOString(),
+    createdAt: new Date()
+```
+
+#### 💻 Terminal Commands
+
+**Command:** `npm test`
+**Exit Code:** 0
+
+```
+> meeting-room-booking-api@1.0.0 test
+> node scripts/test-api.js
+
+
+🚀 Starting server...
+✅ Server started
+
+🧪 Meeting Room Booking API Tests
+
+==================================================
+
+📋 Test: Health Check
+  ✅ Returns 200 status (expected: 200, got: 200)
+  ✅ Returns status ok (expected: ok, got: ok)
+
+📋 Test: Create Valid Booking
+  ✅ Returns 201 status (expected: 201, got: 201)
+  ✅ Returns booking ID
+  ✅ Returns correct roomId (expected: room-1, got: room-1)
+
+📋 Test: Create Booking - Missing Fields
+  ✅ Returns 400 for missing fields (expected: 400, got: 400)
+
+📋 Test: Create Booking - Past Date
+  ✅ Returns 400 for past booking (expected: 400, got: 400)
+  ✅ Error mentions past
+
+📋 Test: Create Booking - End Before Start
+  ✅ Returns 400 for invalid time range (expected: 400, got: 400)
+
+📋 Test: Create Booking - Overlapping
+  ✅ Returns 409 for overlapping booking (expected: 409, got: 409)
+
+📋 Test: List Bookings for Room
+  ✅ Returns 200 status (expected: 200, got: 200)
+  ✅ Returns an array
+  ✅ Has at least one booking
+
+📋 Test: List Bookings - Empty Room
+  ✅ Returns 200 status (expected: 200, got: 200)
+  ✅ Returns empty array (expected: 0, got: 0)
+
+📋 Test: Cancel Booking
+  ✅ Returns 200 status (expected: 200, got: 200)
+  ✅ Confirms cancellation
+
+📋 Test: Cancel Non-Existent Booking
+  ✅ Returns 404 for non-existent booking (expected: 404, got: 404)
+
+📋 Test: Cancel Invalid ID
+  ✅ Returns 400 for invalid ID (expected: 400, got: 400)
+
+📋 Test: Different Rooms - No Conflict
+  ✅ Different room booking succeeds (expected: 201, got: 201)
+
+==================================================
+
+📊 Results: 20 passed, 0 failed
+
+🛑 Server stopped
+[?1004h
+```
+
+#### 📝 Response
+
+
+All tests pass. I've extracted the business rules into separate validator methods:
+
+| Method | Purpose |
+|--------|---------|
+| `validateRequiredFields()` | Checks roomId, startTime, endTime are present |
+| `validateDateFormat()` | Validates dates are parseable |
+| `validateTimeOrder()` | Ensures start time is before end time |
+| `validateNotInPast()` | Ensures booking isn't in the past |
+| `validateNoOverlap()` | Checks for conflicting bookings |
+| `validateBooking()` | Orchestrates all validations |
+
+The endpoint code is now much cleaner - it just calls `validateBooking()` and handles the result, then creates the booking if valid.
+
+---
+
