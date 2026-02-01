@@ -1,19 +1,29 @@
 /**
  * Business rule validators for bookings
+ * Pure business logic - no HTTP concerns
  */
 
 const bookingStore = require('../storage/bookingStore');
+const ErrorTypes = require('../constants/errorTypes');
 
 /**
  * Validate that all required fields are present
  */
 function validateRequiredFields(roomId, startTime, endTime) {
   if (!roomId || !startTime || !endTime) {
-    return { valid: false, error: 'roomId, startTime, and endTime are required', status: 400 };
+    return { 
+      valid: false, 
+      error: 'roomId, startTime, and endTime are required', 
+      errorType: ErrorTypes.MISSING_REQUIRED_FIELDS 
+    };
   }
   // Check that roomId is not just whitespace
   if (typeof roomId === 'string' && roomId.trim() === '') {
-    return { valid: false, error: 'roomId cannot be empty or whitespace', status: 400 };
+    return { 
+      valid: false, 
+      error: 'roomId cannot be empty or whitespace', 
+      errorType: ErrorTypes.INVALID_ROOM_ID 
+    };
   }
   return { valid: true };
 }
@@ -26,7 +36,11 @@ function validateDateFormat(startTime, endTime) {
   const end = new Date(endTime);
   
   if (isNaN(start.getTime()) || isNaN(end.getTime())) {
-    return { valid: false, error: 'Invalid date format', status: 400 };
+    return { 
+      valid: false, 
+      error: 'Invalid date format', 
+      errorType: ErrorTypes.INVALID_DATE_FORMAT 
+    };
   }
   return { valid: true, start, end };
 }
@@ -36,7 +50,11 @@ function validateDateFormat(startTime, endTime) {
  */
 function validateTimeOrder(start, end) {
   if (start >= end) {
-    return { valid: false, error: 'Start time must be before end time', status: 400 };
+    return { 
+      valid: false, 
+      error: 'Start time must be before end time', 
+      errorType: ErrorTypes.INVALID_TIME_ORDER 
+    };
   }
   return { valid: true };
 }
@@ -46,7 +64,11 @@ function validateTimeOrder(start, end) {
  */
 function validateNotInPast(start) {
   if (start < new Date()) {
-    return { valid: false, error: 'Bookings cannot be in the past', status: 400 };
+    return { 
+      valid: false, 
+      error: 'Bookings cannot be in the past', 
+      errorType: ErrorTypes.BOOKING_IN_PAST 
+    };
   }
   return { valid: true };
 }
@@ -60,8 +82,8 @@ function validateNoOverlap(roomId, startTime, endTime) {
     return { 
       valid: false, 
       error: 'Booking overlaps with an existing booking', 
-      status: 409,
-      conflictingBooking: overlapping 
+      errorType: ErrorTypes.BOOKING_OVERLAP,
+      data: { conflictingBooking: overlapping }
     };
   }
   return { valid: true };
@@ -102,7 +124,11 @@ function validateBooking(roomId, startTime, endTime) {
 function validateBookingId(id) {
   const bookingId = parseInt(id, 10);
   if (isNaN(bookingId)) {
-    return { valid: false, error: 'Invalid booking ID', status: 400 };
+    return { 
+      valid: false, 
+      error: 'Invalid booking ID', 
+      errorType: ErrorTypes.INVALID_BOOKING_ID 
+    };
   }
   return { valid: true, bookingId };
 }
@@ -114,5 +140,6 @@ module.exports = {
   validateNotInPast,
   validateNoOverlap,
   validateBooking,
-  validateBookingId
+  validateBookingId,
+  ErrorTypes
 };

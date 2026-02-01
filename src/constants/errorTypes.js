@@ -1,0 +1,17 @@
+/**
+ * Error types for business logic validation
+ * These are domain-specific error codes, not HTTP status codes
+ */
+
+const ErrorTypes = {
+  MISSING_REQUIRED_FIELDS: 'MISSING_REQUIRED_FIELDS',
+  INVALID_ROOM_ID: 'INVALID_ROOM_ID',
+  INVALID_DATE_FORMAT: 'INVALID_DATE_FORMAT',
+  INVALID_TIME_ORDER: 'INVALID_TIME_ORDER',
+  BOOKING_IN_PAST: 'BOOKING_IN_PAST',
+  BOOKING_OVERLAP: 'BOOKING_OVERLAP',
+  INVALID_BOOKING_ID: 'INVALID_BOOKING_ID',
+  BOOKING_NOT_FOUND: 'BOOKING_NOT_FOUND',
+};
+
+module.exports = ErrorTypes;
