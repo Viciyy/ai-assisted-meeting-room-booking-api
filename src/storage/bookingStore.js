@@ -15,7 +15,7 @@ function timesOverlap(start1, end1, start2, end2) {
  */
 function findOverlappingBooking(roomId, startTime, endTime, excludeBookingId = null) {
   return bookings.find(booking => 
-    booking.roomId === roomId &&
+    booking.roomId.toString() === roomId.toString() &&
     booking.id !== excludeBookingId &&
     timesOverlap(new Date(startTime), new Date(endTime), new Date(booking.startTime), new Date(booking.endTime))
   );
@@ -33,7 +33,7 @@ function getAllBookings() {
  */
 function getBookingsByRoom(roomId) {
   return bookings
-    .filter(booking => booking.roomId === roomId)
+    .filter(booking => booking.roomId.toString() === roomId.toString())
     .sort((a, b) => new Date(a.startTime) - new Date(b.startTime));
 }
 
